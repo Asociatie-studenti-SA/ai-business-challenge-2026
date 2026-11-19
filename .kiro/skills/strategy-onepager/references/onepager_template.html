@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <title>Strategie pe o Pagină — {{PROJECT_NAME}}</title>
+  <style>
+    @page { size: A4 portrait; margin: 11mm; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: #0f172a;
+      font-size: 9.6pt;
+      line-height: 1.38;
+      background: #ffffff;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      border-bottom: 2.5px solid #0f766e;
+      padding-bottom: 8px;
+      margin-bottom: 10px;
+    }
+    .brand { font-size: 17pt; font-weight: 800; color: #0f172a; letter-spacing: -0.3px; }
+    .tagline { font-size: 9.5pt; color: #475569; margin-top: 2px; }
+    .meta { text-align: right; font-size: 8.2pt; color: #475569; }
+    .badge { display: inline-block; background: #f0fdfa; color: #0f766e; font-weight: 700; padding: 2px 7px; border-radius: 99px; font-size: 7.8pt; margin-bottom: 3px; border: 1px solid #99f6e4; }
+    .kpi-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .kpi {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-top: 3px solid #0369a1;
+      border-radius: 6px;
+      padding: 6px 8px;
+    }
+    .kpi.green { border-top-color: #0f766e; }
+    .kpi-val { font-size: 12.5pt; font-weight: 800; color: #0f172a; }
+    .kpi-lbl { font-size: 7.5pt; color: #64748b; text-transform: uppercase; letter-spacing: 0.3px; }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .card {
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 9px 11px;
+      background: #ffffff;
+    }
+    .card.full { grid-column: 1 / -1; }
+    h2 {
+      font-size: 9.8pt;
+      font-weight: 800;
+      color: #0f766e;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      margin-bottom: 5px;
+    }
+    ul { padding-left: 15px; }
+    li { margin-bottom: 3px; }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 4px;
+    }
+    .step {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 7px 9px;
+    }
+    .step-num { font-size: 8pt; font-weight: 800; color: #059669; text-transform: uppercase; }
+    .step-title { font-weight: 700; font-size: 9.2pt; margin: 2px 0; }
+    .footer {
+      border-top: 1px solid #e2e8f0;
+      padding-top: 6px;
+      font-size: 8pt;
+      color: #64748b;
+      display: flex;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div>
+      <div class="badge">Strategie pe o Pagină • AI-Powered Business Challenge 2026</div>
+      <div class="brand">{{PROJECT_NAME}}</div>
+      <div class="tagline">{{TAGLINE}}</div>
+    </div>
+    <div class="meta">
+      <div><strong>Prototip live:</strong> {{LIVE_URL}}</div>
+      <div>Model comercial: {{PRICING_MODEL}}</div>
+    </div>
+  </div>
+
+  <div class="kpi-strip">
+    <div class="kpi"><div class="kpi-val">{{UNIT_PRICE}}</div><div class="kpi-lbl">Preț unitar</div></div>
+    <div class="kpi green"><div class="kpi-val">{{REV_Y1}}</div><div class="kpi-lbl">Venit estimat An 1</div></div>
+    <div class="kpi"><div class="kpi-val">{{BREAK_EVEN}}</div><div class="kpi-lbl">Prag rentabilitate</div></div>
+    <div class="kpi green"><div class="kpi-val">{{LTV_CAC}}</div><div class="kpi-lbl">LTV / CAC</div></div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h2>1. Problema</h2>
+      <ul>{{PROBLEM_BULLETS}}</ul>
+    </div>
+    <div class="card">
+      <h2>2. Publicul Vizat</h2>
+      <ul>{{AUDIENCE_BULLETS}}</ul>
+    </div>
+    <div class="card">
+      <h2>3. Soluția &amp; Diferențiator</h2>
+      <ul>{{SOLUTION_BULLETS}}</ul>
+    </div>
+    <div class="card">
+      <h2>4. Atragerea Clienților (GTM)</h2>
+      <ul>{{GTM_BULLETS}}</ul>
+    </div>
+    <div class="card full">
+      <h2>5. Trei Pași de Implementare</h2>
+      <div class="steps">
+        <div class="step"><div class="step-num">Pasul 1</div><div class="step-title">{{STEP1_TITLE}}</div><div>{{STEP1_DESC}}</div></div>
+        <div class="step"><div class="step-num">Pasul 2</div><div class="step-title">{{STEP2_TITLE}}</div><div>{{STEP2_DESC}}</div></div>
+        <div class="step"><div class="step-num">Pasul 3</div><div class="step-title">{{STEP3_TITLE}}</div><div>{{STEP3_DESC}}</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div><strong>Risc principal &amp; mitigare:</strong> {{RISK_MITIGATION}}</div>
+    <div>Date sincronizate cu financial_model.xlsx</div>
+  </div>
+</body>
+</html>

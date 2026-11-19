@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <title>Promo Poster — {{PROJECT_NAME}}</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 1080px;
+      height: 1350px;
+      overflow: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: linear-gradient(160deg, #0f172a 0%, #11323b 55%, #0f172a 100%);
+      color: #ffffff;
+    }
+    .canvas {
+      width: 1080px;
+      height: 1350px;
+      padding: 72px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+    .glow {
+      position: absolute;
+      width: 620px;
+      height: 620px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(13,148,136,0.28) 0%, rgba(15,23,42,0) 70%);
+      top: -120px;
+      right: -120px;
+      pointer-events: none;
+    }
+    .top { display: flex; justify-content: space-between; align-items: center; z-index: 1; }
+    .brand { font-size: 32px; font-weight: 900; letter-spacing: -0.5px; }
+    .pill {
+      background: rgba(16, 185, 129, 0.16);
+      border: 1.5px solid rgba(16, 185, 129, 0.55);
+      color: #6ee7b7;
+      padding: 10px 22px;
+      border-radius: 999px;
+      font-size: 20px;
+      font-weight: 700;
+    }
+    .hero { z-index: 1; margin-top: 24px; }
+    h1 { font-size: 74px; line-height: 1.05; font-weight: 900; letter-spacing: -1.8px; margin-bottom: 24px; }
+    h1 span { color: #2dd4bf; }
+    .sub { font-size: 30px; line-height: 1.38; color: #cbd5e1; max-width: 880px; }
+    .visual-card {
+      z-index: 1;
+      background: rgba(255,255,255,0.06);
+      border: 1.5px solid rgba(255,255,255,0.14);
+      border-radius: 28px;
+      padding: 40px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+    }
+    .box {
+      background: rgba(15,23,42,0.72);
+      border-radius: 20px;
+      padding: 28px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .box.after { border-color: rgba(16,185,129,0.65); background: rgba(6,78,59,0.28); }
+    .box-tag { font-size: 18px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 14px; color: #94a3b8; }
+    .box.after .box-tag { color: #34d399; }
+    .box-val { font-size: 46px; font-weight: 900; margin-bottom: 10px; }
+    .box-desc { font-size: 22px; color: #cbd5e1; line-height: 1.35; }
+    .cta-bar {
+      z-index: 1;
+      background: #0f766e;
+      border-radius: 24px;
+      padding: 34px 42px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 24px 50px rgba(15,118,110,0.42);
+    }
+    .cta-title { font-size: 34px; font-weight: 900; margin-bottom: 6px; }
+    .cta-url { font-size: 24px; color: #ccfbf1; font-weight: 600; }
+    .cta-btn {
+      background: #ffffff;
+      color: #0f172a;
+      font-size: 24px;
+      font-weight: 900;
+      padding: 20px 34px;
+      border-radius: 16px;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+  <div class="canvas">
+    <div class="glow"></div>
+    <div class="top">
+      <div class="brand">{{PROJECT_NAME}}</div>
+      <div class="pill">{{AUDIENCE_BADGE}}</div>
+    </div>
+    <div class="hero">
+      <h1>{{HEADLINE_MAIN}} <span>{{HEADLINE_ACCENT}}</span></h1>
+      <div class="sub">{{SUBHEADLINE}}</div>
+    </div>
+    <div class="visual-card">
+      <div class="box">
+        <div class="box-tag">Înainte</div>
+        <div class="box-val">{{BEFORE_METRIC}}</div>
+        <div class="box-desc">{{BEFORE_DESC}}</div>
+      </div>
+      <div class="box after">
+        <div class="box-tag">Cu {{PROJECT_NAME}}</div>
+        <div class="box-val">{{AFTER_METRIC}}</div>
+        <div class="box-desc">{{AFTER_DESC}}</div>
+      </div>
+    </div>
+    <div class="cta-bar">
+      <div>
+        <div class="cta-title">{{CTA_TITLE}}</div>
+        <div class="cta-url">{{LIVE_URL}}</div>
+      </div>
+      <div class="cta-btn">{{CTA_BUTTON}} →</div>
+    </div>
+  </div>
+</body>
+</html>

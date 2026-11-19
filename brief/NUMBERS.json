@@ -1,0 +1,39 @@
+{
+  "status": "TEMPLATE",
+  "project_name": "TBD",
+  "output_language": "ro",
+  "currency": "RON",
+  "horizon_months": 12,
+  "live_app_url": "TBD",
+  "ui_contract": {
+    "demo_button_label": "TBD",
+    "primary_cta_label": "TBD",
+    "demo_input_summary": "TBD",
+    "demo_expected_output": "TBD"
+  },
+  "pricing": {
+    "model": "TBD",
+    "unit_price": 0,
+    "unit_label": "RON / lună"
+  },
+  "assumptions": {
+    "starting_customers_m1": 0,
+    "ending_customers_m12": 0,
+    "monthly_new_customers_avg": 0,
+    "monthly_churn_rate": 0.05,
+    "cac": 0,
+    "variable_cost_per_unit": 0,
+    "monthly_fixed_costs": 0,
+    "initial_setup_cost": 0
+  },
+  "summary_year_1": {
+    "total_revenue": 0,
+    "total_costs": 0,
+    "net_profit": 0,
+    "break_even_month": 0,
+    "break_even_units_per_month": 0,
+    "gross_margin_pct": 0,
+    "ltv_to_cac": 0
+  },
+  "brief_data_references": []
+}

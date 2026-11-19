@@ -1,0 +1,130 @@
+{
+  "project_name": "NumeProiect",
+  "slides": [
+    {
+      "badge": "01 / Problema & Oportunitatea",
+      "title": "Titlu percutant orientat pe problemă (max 10 cuvinte)",
+      "subtitle": "Propunere de valoare într-o singură propoziție clară.",
+      "kpis": [
+        { "value": "X%", "label": "Cifră-cheie din temă/brief" },
+        { "value": "Y RON", "label": "Costul actual al problemei" },
+        { "value": "Z min", "label": "Timp economisit cu soluția noastră" }
+      ],
+      "cards": [
+        {
+          "title": "Problema reală",
+          "bullets": [
+            "Punct de durere 1 ancorat în datele primite",
+            "Punct de durere 2",
+            "De ce alternativele actuale eșuează"
+          ]
+        },
+        {
+          "title": "Publicul țintă (ICP)",
+          "bullets": [
+            "Cine folosește aplicația zilnic",
+            "Cine plătește și de ce (buget/ROI)",
+            "Nișa inițială de lansare în România"
+          ]
+        }
+      ]
+    },
+    {
+      "badge": "02 / Soluția & Demo Live",
+      "title": "Cum funcționează produsul — Demo în 60 de secunde",
+      "subtitle": "Link live: https://exemplu.vercel.app (date fictive preîncărcate, fără login)",
+      "cards": [
+        {
+          "title": "Funcția principală testabilă",
+          "bullets": [
+            "Pas 1: Click pe «Încarcă scenariu demo»",
+            "Pas 2: Completează/ajustează parametrii",
+            "Pas 3: Obții instant rezultatul calculat & acționabil"
+          ]
+        },
+        {
+          "title": "Diferențiator & Avantaj",
+          "bullets": [
+            "Simplu: rezultat în <30 secunde",
+            "Adaptat exact pe datele și contextul temei",
+            "Zero fricțiune, gata de pilotare imediată"
+          ]
+        }
+      ]
+    },
+    {
+      "badge": "03 / Strategie, Promovare & Implementare",
+      "title": "Cum atragem primii clienți și scalăm în 3 pași",
+      "subtitle": "Go-To-Market pragmatic + material de promovare aliniat publicului țintă",
+      "cards": [
+        {
+          "title": "Atragere clienți (GTM)",
+          "bullets": [
+            "Canal principal + motivul alegerii",
+            "Mesaj cheie & ofertă pilot de intrare",
+            "CAC țintă: X RON (recuperat în Y luni)"
+          ]
+        },
+        {
+          "title": "3 Pași de Implementare",
+          "bullets": [
+            "Pas 1 (Luna 1): Pilot cu 10 utilizatori reali",
+            "Pas 2 (Lunile 2–3): Validare plăți & iterare",
+            "Pas 3 (Lunile 4–12): Scalare regională & parteneriate"
+          ]
+        }
+      ]
+    },
+    {
+      "badge": "04 / Model Financiar (An 1 — Scenariu de Bază)",
+      "title": "Unit Economics sănătoase și Break-Even realist",
+      "subtitle": "Toate cifrele provin din financial_model.xlsx (formule dinamice Excel)",
+      "kpis": [
+        { "value": "X RON", "label": "Venit estimat An 1" },
+        { "value": "Y RON", "label": "Rezultat net An 1" },
+        { "value": "Luna M", "label": "Break-Even operațional" },
+        { "value": "Z.Zx", "label": "Raport LTV / CAC" }
+      ],
+      "cards": [
+        {
+          "title": "Structură de Venituri & Costuri",
+          "bullets": [
+            "Preț: X RON/lună | Cost variabil: Y RON/lună (Marjă brută Z%)",
+            "Costuri fixe lunare: W RON | Investiție inițială: V RON",
+            "Prag rentabilitate: N clienți activi/lună"
+          ]
+        },
+        {
+          "title": "Managementul Riscului",
+          "bullets": [
+            "Risc principal: creșterea CAC sau churn-ului",
+            "Mitigare: pilot cu feedback direct + abonamente trimestriale"
+          ]
+        }
+      ]
+    },
+    {
+      "badge": "05 / Utilizarea Critică a AI & Concluzie",
+      "title": "AI ca accelerator, echipa ca filtru critic",
+      "subtitle": "Flux multi-agent sincronizat + verificare umană riguroasă",
+      "cards": [
+        {
+          "title": "Rezultat AI verificat și corectat",
+          "bullets": [
+            "Inițial (AI): [eroarea concretă generată de AI]",
+            "Detectare: [cum am verificat matematic/UX]",
+            "Corecție: [ce a schimbat echipa + impact concret]"
+          ]
+        },
+        {
+          "title": "De ce merită să investești / să pilotezi",
+          "bullets": [
+            "Prototip funcțional live acum (link mai jos)",
+            "Cifre coerente, verificabile în Excel",
+            "Echipă pregătită să lanseze pilotul mâine"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+# Secrets & Environment (NEVER commit!)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*credentials*.json
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Node & Frontend builds
+node_modules/
+app/node_modules/
+app/dist/
+app/.next/
+app/.vercel/
+app/.netlify/
+.vercel/
+.netlify/
+
+# OS, Editor & Lockfiles
+.DS_Store
+Thumbs.db
+desktop.ini
+.~lock.*
+*.swp
+*.swo
+.vscode/
+.idea/
+
+# Logs, Temp & Local Packaging
+*.log
+*.tmp
+tmp/
+.taste-skill/
+submission/
