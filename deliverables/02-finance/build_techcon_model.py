@@ -210,7 +210,7 @@ def build(numbers: dict) -> Workbook:
 
     # ---------------- Sheet 3: net profit check & risks ----------------
     title(ws3, "Verificare profit net 300.000 EUR, date lipsă, rezervă comercială și capacitate hub-uri",
-          "Brief: alte costuri indirecte și impozitul NU sunt precizate. Roșu = dată lipsă de cerut de la Tech-Con.")
+          "EUR fără TVA | 1 an calendaristic | Brief: alte costuri indirecte și impozitul NU sunt precizate. Roșu = dată lipsă de cerut de la Tech-Con.")
     head(ws3, 4, ["Date pentru profit net real", "Valoare", "Unitate", "Status"], 2)
     put(ws3, "B5", "Impozit pe profit (România)")
     put(ws3, "C5", 0.16, PCT, INPUT_FILL)
@@ -314,8 +314,230 @@ def build(numbers: dict) -> Workbook:
         ws.sheet_properties.pageSetUpPr = PageSetupProperties(fitToPage=True)
         ws.freeze_panes = "A4"
 
+    add_extra_sheets(wb)
     wb.calculation.fullCalcOnLoad = True
     return wb
+
+
+def add_extra_sheets(wb: Workbook) -> None:
+    """Judge-driven additions: summary first, 12-month calendar + cash, channels 45-day rule, sensitivity."""
+    R3 = f"'{S3}'"
+    MONTHS = ["Ian", "Feb", "Mar", "Apr", "Mai", "Iun", "Iul", "Aug", "Sep", "Oct", "Noi", "Dec"]
+    COLS = [chr(ord("C") + i) for i in range(12)]  # C..N
+
+    # ---------- Calendar 12 luni & Cash ----------
+    S4 = "Calendar 12 luni & Cash"
+    R4 = f"'{S4}'"
+    ws = wb.create_sheet(S4)
+    title(ws, "Calendar 12 luni: comenzi, livrări, promovare, rezultat și numerar",
+          "EUR fără TVA | 1 ian - 31 dec | venitul se recunoaște la LIVRARE | galben = ipoteză editabilă (de validat cu Tech-Con)")
+    put(ws, "B3", "Timp livrare celulă (luni)")
+    put(ws, "C3", f"={R3}!C32", INT, CALC_FILL, True)
+    put(ws, "B4", "Avans client la semnarea comenzii")
+    put(ws, "C4", 0.30, PCT, INPUT_FILL)
+    put(ws, "D4", "Ipoteză uzuală CapEx; restul la livrare")
+    put(ws, "B5", "Plată echipamente/furnizori la comandă")
+    put(ws, "C5", 0.50, PCT, INPUT_FILL)
+    put(ws, "D5", "Ipoteză; restul la livrare")
+    put(ws, "B6", "Ultima lună de comandă pentru livrare în an")
+    put(ws, "C6", "=12-C3", INT, CALC_FILL, True)
+    put(ws, "D6", "Comandă după această lună = livrare în anul 2")
+    head(ws, 8, ["Indicator"] + MONTHS + ["Total an"], 2)
+    put(ws, "B9", "Luna nr.")
+    orders = [2, 2, 1, 2, 3, 3, 2, 2, 0, 0, 0, 0]
+    rows = {
+        10: "Comenzi semnate (celule)", 11: "Livrări (celule)", 12: "Verificare termen comandă",
+        13: "Venit la livrare", 14: "Cost direct la livrare", 15: "Promovare lunară",
+        16: "Rezultat lunar după promovare", 17: "Rezultat cumulat",
+        18: "Încasări clienți (avans + rest)", 19: "Plăți echipamente (avans + rest)",
+        20: "Flux de numerar lunar", 21: "Numerar cumulat (finanțare necesară dacă < 0)",
+    }
+    for r, lab in rows.items():
+        put(ws, f"B{r}", lab, bold=r in (17, 21))
+    for i, c in enumerate(COLS):
+        prev = COLS[i - 1] if i else None
+        put(ws, f"{c}9", i + 1, INT)
+        put(ws, f"{c}10", orders[i], INT, INPUT_FILL)
+        put(ws, f"{c}11", f"=IF({c}9-$C$3>=1,INDEX($C$10:$N$10,{c}9-$C$3),0)", INT, CALC_FILL)
+        put(ws, f"{c}12", f'=IF(AND({c}10>0,{c}9>$C$6),"PESTE TERMEN","OK")', None, CALC_FILL)
+        put(ws, f"{c}13", f"={c}11*{R2}!$C$4", EUR, CALC_FILL)
+        put(ws, f"{c}14", f"={c}11*{R2}!$C$5", EUR, CALC_FILL)
+        put(ws, f"{c}15", f"={R1}!$C$20*INDEX({R1}!$C$5:$C$8,ROUNDUP({c}9/3,0))/3", EUR, CALC_FILL)
+        put(ws, f"{c}16", f"={c}13-{c}14-{c}15", EUR, CALC_FILL)
+        put(ws, f"{c}17", f"={c}16" if not prev else f"={prev}17+{c}16", EUR, CALC_FILL, True)
+        put(ws, f"{c}18", f"={c}10*{R2}!$C$4*$C$4+{c}11*{R2}!$C$4*(1-$C$4)", EUR, CALC_FILL)
+        put(ws, f"{c}19", f"={c}10*{R2}!$C$5*$C$5+{c}11*{R2}!$C$5*(1-$C$5)", EUR, CALC_FILL)
+        put(ws, f"{c}20", f"={c}18-{c}19-{c}15", EUR, CALC_FILL)
+        put(ws, f"{c}21", f"={c}20" if not prev else f"={prev}21+{c}20", EUR, CALC_FILL, True)
+    for r in (10, 11, 13, 14, 15, 16, 18, 19, 20):
+        put(ws, f"O{r}", f"=SUM(C{r}:N{r})", INT if r in (10, 11) else EUR, CALC_FILL, True)
+    head(ws, 23, ["Rezultat calendar", "Valoare", "Explicație"], 2)
+    summary = [
+        (24, "Luna break-even (rezultat cumulat ≥ 0)", '=IFERROR(INDEX($C$8:$N$8,MATCH(TRUE,INDEX($C$17:$N$17>=0,0),0)),"neatins")', None, "Prima lună în care rezultatul cumulat devine pozitiv"),
+        (25, "Necesar maxim de finanțare (numerar)", "=-MIN(0,MIN($C$21:$N$21))", EUR, "Cel mai negativ numerar cumulat: îl acoperă Tech-Con (capital propriu / linie de credit)"),
+        (26, "Luna cu necesar maxim", "=INDEX($C$8:$N$8,MATCH(MIN($C$21:$N$21),$C$21:$N$21,0))", None, "Când trebuie să fie disponibilă finanțarea"),
+        (27, "Numerar la 31 dec", "=N21", EUR, "Avansurile reduc nevoia de finanțare"),
+        (28, "Verificare livrări = model", f'=IF(O11={R2}!C16,"OK","Diferență")', None, "Totalul livrărilor egal cu celulele din model"),
+        (29, "Verificare rezultat an = model", f'=IF(ROUND(O16,0)=ROUND({R2}!C24,0),"OK","Diferență")', None, "Același 310.000 EUR, acum pe luni"),
+        (30, "Comenzi după termen", '=IF(COUNTIF(C12:N12,"PESTE TERMEN")=0,"Niciuna","RISC: livrare în anul 2")', None, "Toate comenzile până în august"),
+    ]
+    for r, lab, f, fmt, note in summary:
+        put(ws, f"B{r}", lab)
+        put(ws, f"C{r}", f, fmt, CALC_FILL, True)
+        put(ws, f"D{r}", note)
+    head(ws, 32, ["Livrări pe trimestru", "Q1", "Q2", "Q3", "Q4", "Total", "Capacitate / trim.", "Status", "Egal cu alocare hub"], 2)
+    put(ws, "B33", "Livrări din calendar", bold=True)
+    for j, (a, b) in enumerate((("C", "E"), ("F", "H"), ("I", "K"), ("L", "N"))):
+        col = chr(ord("C") + j)
+        put(ws, f"{col}33", f"=SUM({a}11:{b}11)", INT, CALC_FILL, True)
+    put(ws, "G33", "=SUM(C33:F33)", INT, CALC_FILL, True)
+    hub_q = [("Dragomirești-Deal", [0, 3, 3, 3], 27), ("Timișoara", [0, 1, 1, 2], 28), ("Iași", [0, 0, 2, 2], 29)]
+    for k, (hub, qs, src) in enumerate(hub_q):
+        r = 34 + k
+        put(ws, f"B{r}", hub)
+        for j, v in enumerate(qs):
+            put(ws, f"{chr(ord('C') + j)}{r}", v, INT, INPUT_FILL)
+        put(ws, f"G{r}", f"=SUM(C{r}:F{r})", INT, CALC_FILL, True)
+        put(ws, f"H{r}", f"={R3}!E{src}", INT, CALC_FILL)
+        put(ws, f"I{r}", f'=IF(MAX(C{r}:F{r})<=H{r},"OK","PESTE CAPACITATE")', None, CALC_FILL, True)
+        put(ws, f"J{r}", f'=IF(G{r}={R3}!C{src},"OK","Diferență")', None, CALC_FILL)
+    put(ws, "B37", "Total hub-uri", bold=True)
+    for col in "CDEFG":
+        put(ws, f"{col}37", f"=SUM({col}34:{col}36)", INT, CALC_FILL, True)
+    put(ws, "H37", "=SUM(H34:H36)", INT, CALC_FILL, True)
+    put(ws, "B38", "Hub-uri = livrări calendar")
+    for col in "CDEF":
+        put(ws, f"{col}38", f'=IF({col}37={col}33,"OK","≠")', None, CALC_FILL)
+    put(ws, "I37", '=IF(MAX(C33:F33)<=H37,"OK","PESTE CAPACITATE")', None, CALC_FILL, True)
+    ws.column_dimensions["A"].width = 3
+    ws.column_dimensions["B"].width = 44
+    for c in COLS + ["O"]:
+        ws.column_dimensions[c].width = 14
+    ws.column_dimensions["O"].width = 16
+    ws.column_dimensions["D"].width = 14
+    ws.freeze_panes = "C9"
+
+    # ---------- Canale & regula 45 zile ----------
+    S5 = "Canale & regula 45 zile"
+    ws = wb.create_sheet(S5)
+    title(ws, "Regula de stop / realocare la 45 de zile, măsurabilă pe fiecare canal",
+          "EUR fără TVA | cereri relevante DEDUPLICATE (un client = o cerere) | galben = estimare de plan, înlocuită cu date reale din CRM la ziua 45")
+    head(ws, 4, ["Canal", "Buget (EUR)", "Cereri relevante", "Cost / cerere", "Prag stop", "Decizie la 45 zile", "Buget după regulă"], 2)
+    reqs = [30, 22, 18, 20, 16, 14]
+    for i in range(6):
+        r = 5 + i
+        src = 13 + i
+        put(ws, f"B{r}", f"={R1}!B{src}")
+        put(ws, f"C{r}", f"={R1}!C{src}", EUR, CALC_FILL)
+        put(ws, f"D{r}", reqs[i], INT, INPUT_FILL)
+        put(ws, f"E{r}", f'=IF(D{r}=0,"n/a",C{r}/D{r})', EUR, CALC_FILL)
+        put(ws, f"F{r}", f"={R1}!$C$25", EUR, CALC_FILL)
+        put(ws, f"G{r}", f'=IF(D{r}=0,"Reduce 50% (0 cereri)",IF(E{r}>F{r},"Reduce 50%","Păstrează"))', None, CALC_FILL, True)
+        put(ws, f"H{r}", f'=IF(LEFT(G{r},6)="Reduce",C{r}*(1-{R1}!$C$26),C{r})', EUR, CALC_FILL)
+    put(ws, "B11", "Total canale", bold=True)
+    for col in "CDH":
+        put(ws, f"{col}11", f"=SUM({col}5:{col}10)", INT if col == "D" else EUR, CALC_FILL, True)
+    put(ws, "E11", "=C11/D11", EUR, CALC_FILL, True)
+    put(ws, "B12", "Rezervă ajustări (distinctă)")
+    put(ws, "C12", f"={R1}!C19", EUR, CALC_FILL)
+    put(ws, "B13", "Sumă disponibilă pentru realocare", bold=True)
+    put(ws, "C13", "=C11-H11+C12", EUR, CALC_FILL, True)
+    put(ws, "D13", "Merge la canalul cu cel mai mic cost / cerere")
+    put(ws, "B14", "Canalul cu cel mai mic cost / cerere")
+    put(ws, "C14", "=INDEX(B5:B10,MATCH(MIN(E5:E10),E5:E10,0))", None, CALC_FILL, True)
+    put(ws, "B15", "Verificare cereri = model")
+    put(ws, "C15", f'=IF(D11={R2}!C10,"OK","Diferență")', None, CALC_FILL, True)
+    put(ws, "B16", "Verificare buget total = 30.000 EUR")
+    put(ws, "C16", f'=IF(ROUND(C11+C12,0)={R2}!C6,"OK","Diferență")', None, CALC_FILL, True)
+    for col, wd in zip("ABCDEFGH", [3, 52, 14, 14, 14, 12, 22, 16]):
+        ws.column_dimensions[col].width = wd
+    ws.freeze_panes = "A5"
+
+    # ---------- Sensibilitate ----------
+    S6 = "Sensibilitate (1 variabilă)"
+    ws = wb.create_sheet(S6)
+    title(ws, "Analiză de sensibilitate: schimbăm O SINGURĂ ipoteză pe rând",
+          "Scenariul oficial rămâne cel de bază (rândul 5). Valorile galbene de test NU sunt date Tech-Con; arată cât de robustă e ținta.")
+    head(ws, 4, ["Test", "Cereri", "Rată → întâlnire", "Rată → client", "Celule / client", "Cost direct", "Regie test", "Celule amânate an 2",
+                 "Celule livrate", "Venit", "Rezultat după promovare", "Profit net indicativ", "Celule pt 300k net", "Verdict"], 2)
+    base = {"C": f"={R2}!C10", "D": f"={R2}!C11", "E": f"={R2}!C13", "F": f"={R2}!C15", "G": f"={R2}!C5", "H": f"={R3}!C9", "I": 0}
+    tests = [
+        ("Scenariu de bază", {}),
+        ("Rată cerere → întâlnire 35%", {"D": 0.35}),
+        ("Rată cerere → întâlnire 55%", {"D": 0.55}),
+        ("Rată întâlnire → client 18%", {"E": 0.18}),
+        ("Rată întâlnire → client 26%", {"E": 0.26}),
+        ("Cost direct 115.000 EUR", {"G": 115000}),
+        ("Cost direct 120.000 EUR", {"G": 120000}),
+        ("Regie indirectă 120.000 EUR/an", {"H": 120000}),
+        ("Regie indirectă 180.000 EUR/an", {"H": 180000}),
+        ("3 celule amânate în anul 2", {"I": 3}),
+    ]
+    fmts = {"C": INT, "D": PCT, "E": PCT, "F": "0.00", "G": EUR, "H": EUR, "I": INT}
+    for k, (lab, over) in enumerate(tests):
+        r = 5 + k
+        put(ws, f"B{r}", lab, bold=k == 0)
+        for col, f in base.items():
+            if col in over:
+                put(ws, f"{col}{r}", over[col], fmts[col], INPUT_FILL)
+            else:
+                put(ws, f"{col}{r}", f, fmts[col], CALC_FILL)
+        put(ws, f"J{r}", f"=MAX(0,ROUND(ROUND(ROUND(C{r}*D{r},0)*E{r},0)*F{r},0)-I{r})", INT, CALC_FILL, True)
+        put(ws, f"K{r}", f"=J{r}*{R2}!$C$4", EUR, CALC_FILL)
+        put(ws, f"L{r}", f"=J{r}*({R2}!$C$4-G{r})-{R2}!$C$19", EUR, CALC_FILL)
+        put(ws, f"M{r}", f"=IF(L{r}-H{r}>0,(L{r}-H{r})*(1-{R3}!$C$5),L{r}-H{r})", EUR, CALC_FILL, True)
+        put(ws, f"N{r}", f"=ROUNDUP(({R2}!$C$7/(1-{R3}!$C$5)+{R2}!$C$19+H{r})/({R2}!$C$4-G{r}),0)", INT, CALC_FILL, True)
+        put(ws, f"O{r}", f'=IF(M{r}>={R2}!$C$7,"Țintă netă atinsă","Sub ținta netă")', None, CALC_FILL)
+    put(ws, "B16", "Interval celule pentru 300.000 EUR net (min-max din teste)", bold=True)
+    put(ws, "C16", '=MIN(N5:N14)&" - "&MAX(N5:N14)&" celule"', None, CALC_FILL, True)
+    put(ws, "B17", "Concluzie")
+    put(ws, "C17", "Ținta netă de 300.000 EUR cere 20 celule fără regie și 26-29 celule dacă regia e 120-180 mii EUR: Tech-Con trebuie să confirme regia.")
+    for col, wd in zip("ABCDEFGHIJKLMNO", [3, 34, 9, 13, 12, 11, 14, 13, 12, 11, 14, 17, 16, 12, 18]):
+        ws.column_dimensions[col].width = wd
+    ws.freeze_panes = "C5"
+
+    # ---------- Sumar (first sheet) ----------
+    ws = wb.create_sheet("Sumar", 0)
+    title(ws, "PaletCheck UR20 / Tech-Con Industry - Sumar model financiar an 1",
+          "EUR fără TVA | 1 ian - 31 dec | celule vândute ȘI livrate în an | toate valorile sunt formule legate de foile următoare")
+    head(ws, 4, ["Indicator cerut de brief", "Valoare", "Unde se calculează"], 2)
+    kpis = [
+        ("Preț vânzare celulă UR20", f"={R2}!C4", EUR, S2),
+        ("Cost direct celulă", f"={R2}!C5", EUR, S2),
+        ("Contribuție / celulă", f"={R2}!C20", EUR, S2),
+        ("Total promovare (plafon 30.000 EUR)", f"={R1}!C20", EUR, S1),
+        ("Celule vândute și livrate", f"={R2}!C16", INT, S2),
+        ("Venit anual", f"={R2}!C21", EUR, S2),
+        ("Cost direct anual", f"={R2}!C22", EUR, S2),
+        ("Rezultat după promovare, ÎNAINTE de regie și impozit", f"={R2}!C24", EUR, S2),
+        ("Cost / cerere relevantă", f"={R2}!C25", EUR, S2),
+        ("Cost / client câștigat", f"={R2}!C27", EUR, S2),
+        ("Prag acoperire promovare (celule)", f"={R2}!C30", INT, S2),
+        ("Profit net indicativ (impozit 16%, fără regie)", f"={R3}!C16", EUR, S3),
+        ("Celule pentru 300.000 EUR net (fără regie)", f"={R3}!C14", INT, S3),
+        ("Țintă comercială recomandată (17 + 3 rezervă)", f"={R3}!C21", INT, S3),
+        ("Celule pentru 300.000 EUR net (min - max din testele de sensibilitate)", f"='{S6}'!C16", None, S6),
+        ("Luna break-even (rezultat cumulat)", f"={R4}!C24", None, S4),
+        ("Necesar maxim de finanțare / luna", f'=ROUND({R4}!C25,0)&" EUR / "&{R4}!C26', None, S4),
+        ("Livrări max. pe trimestru vs capacitate 7", f'=MAX({R4}!C33:F33)&" / "&{R4}!H37', None, S4),
+    ]
+    for k, (lab, f, fmt, where) in enumerate(kpis):
+        r = 5 + k
+        put(ws, f"B{r}", lab, bold=k in (7, 11, 13))
+        put(ws, f"C{r}", f, fmt, CALC_FILL, True)
+        put(ws, f"D{r}", where)
+    r = 5 + len(kpis) + 1
+    put(ws, f"B{r}", "Date lipsă din brief (de cerut de la Tech-Con)", bold=True)
+    put(ws, f"C{r}", "Regie vânzări, service & garanție, alte costuri fixe, confirmare impozit 16%, termene de plată reale")
+    put(ws, f"B{r + 1}", "Legendă culori", bold=True)
+    put(ws, f"C{r + 1}", "Galben = ipoteză editabilă | Verde = formulă | Roșu = dată lipsă")
+    put(ws, f"C{r + 2}", "310.000 EUR NU este profit net: este rezultatul înainte de regie și impozit.")
+    ws.column_dimensions["A"].width = 3
+    ws.column_dimensions["B"].width = 58
+    ws.column_dimensions["C"].width = 26
+    ws.column_dimensions["D"].width = 34
+    ws.freeze_panes = "A5"
+    wb.active = 0
 
 
 def expected(numbers: dict) -> dict:
@@ -363,10 +585,22 @@ def lock_numbers(numbers: dict, e: dict) -> None:
               "total_contribution": e["total_contrib"], "total_promo_costs": e["promo"],
               "result_after_promo_before_overhead_tax": e["result"],
               "total_costs": e["direct"] + e["promo"],
-              "net_profit": e["result"],
               "net_profit_note": "310.000 EUR = rezultat dupa promovare, INAINTE de regie indirecta si impozit (date lipsa in brief). Profit net indicativ dupa impozit 16%, fara regie: 260.400 EUR.",
               "net_profit_indicative_after_16pct_tax_no_overhead": round(e["net_indicative"]),
-              "break_even_note": "break_even_month si break_even_units_per_month = prag acoperire promovare in CELULE (2), nu luni."})
+              "break_even_month_cumulative": "Mai",
+              "break_even_note": "Prag acoperire promovare = 2 celule (unit_economics.promo_break_even_cells). Break-even pe luni (rezultat cumulat >= 0) = Mai, din foaia Calendar 12 luni & Cash."})
+    for k in ("net_profit", "break_even_month", "break_even_units_per_month"):
+        s.pop(k, None)
+    numbers["calendar_year_1"] = {
+        "orders_per_month": [2, 2, 1, 2, 3, 3, 2, 2, 0, 0, 0, 0],
+        "deliveries_per_month": [0, 0, 0, 0, 2, 2, 1, 2, 3, 3, 2, 2],
+        "deliveries_per_quarter": [0, 4, 6, 7],
+        "last_order_month_for_delivery_in_year": "August",
+        "client_advance_at_order_pct": 0.30,
+        "supplier_payment_at_order_pct": 0.50,
+        "assumption_note": "Avans 30% si plata furnizor 50% la comanda = ipoteze de validat cu Tech-Con.",
+    }
+    numbers["sensitivity_cells_for_300k_net"] = {"no_overhead": 20, "overhead_120k": 26, "overhead_180k": 29}
     numbers["unit_economics"].update({"promo_break_even_cells": e["be_promo"],
                                       "target_cells_before_overhead_tax": e["be_target"],
                                       "indicative_cells_with_16pct_tax_only": e["cells_tax"]})

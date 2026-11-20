@@ -15,3 +15,10 @@
 ## Ipoteză rafinată
 
 - În `brief/NUMBERS.json`, câmpul `net_profit` era 310.000 EUR. Acesta este rezultatul **înainte** de regie și impozit, nu profit net. Am păstrat valoarea pentru compatibilitate și am adăugat `net_profit_note` plus profitul net indicativ după impozit 16%: 260.400 EUR. Echipa nu trebuie să numească 310.000 EUR "profit net" în pitch.
+
+## Evaluare cu juriu simulat și îmbunătățiri (runda 2)
+
+- **Instrument:** 4 sub-agenți Kiro care joacă juriul (BCR, ISF, Mainfreight, comisia de preselecție), cu skill-ul `contest-jury`. Scoruri runda 1 pentru F2: 24 / 24,5 / 23 din 30; P2: 19,5 / 21 / 19 / 23 din 25.
+- **Ce lipsea:** fluxul de numerar și cine finanțează pierderea de la început, calendarul pe luni cu termenul din august, un break-even real pe luni, regula de 45 de zile măsurabilă pe canale, sensibilitatea la regie și cost, o foaie de sumar.
+- **Eroare AI corectată:** câmpurile `net_profit` (310.000) și `break_even_month: 2` din NUMBERS.json erau greșite: 310.000 EUR este rezultatul înainte de regie și impozit, iar 2 înseamnă celule, nu luni. Le-am scos. Break-even-ul real pe luni este **mai**.
+- **Eroare la generarea foii:** antetul `= alocare hub` era citit de Excel ca formulă și dădea #NAME?. L-am găsit la recalcularea în Excel și l-am redenumit. Rezultat: 453 formule, 0 erori.
