@@ -64,7 +64,6 @@
 - **Exact Demo Button Label (Normal Case):** `Încarcă caz normal (Demo)`
 - **Exact Demo Button Label (Error/Missing Case):** `Testează date lipsă / erori`
 - **Exact Primary Submit/Action Button Label:** `Evaluează compatibilitatea UR20`
-- **Exact Photo-Fit Calibration Button Label:** `Calibrează scara pe poză` *(2 atingeri pe latura de 1,2 m a unui europalet → scară reală + inel „Rază UR20 1,75 m”; cel mai îndepărtat punct de plasare a găleții este la 1,59 m ≤ 1,75 m; nu se afirmă că brațul atinge colțul exterior de 1,79 m al paletului, iar reconstrucția 3D AI din foto aparține roadmap-ului V2)*
 - **Demo Input Summary:** `SC LactoSud Demo SRL | Ilfov | Industrie alimentară (Lactate) | Găleată 13 kg + gripper 3 kg = 16 kg | 6,5 găleți/min | 2 schimburi, 2 operatori | Paleți & separatoare manual`
 - **Demo Expected Output (verbatim target):** `Compatibil pentru evaluare tehnică • 16 kg / 20 kg UR20 • 6,5 vs 7,4 găleți/min (reper FAT) • Schimb palet la ~6,8 min (44 găleți/palet) • Hub: Dragomirești-Deal`
 - **App Stack & Deploy Target:** `React + Vite + Tailwind in app/ built to docs/ (base: './') -> deployed LIVE on Netlify (https://paletcheck-ur20-techcon.netlify.app, siteId: f705fe01-7c55-4d2f-9d5f-37c12c174dea)`

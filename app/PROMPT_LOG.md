@@ -19,9 +19,9 @@ Același prompt fixa etichetele exacte ale butoanelor: `Încarcă caz normal (De
 - **Corecția echipei:** am mutat toate adnotările pe un strat superior (`drawTopmostAnnotations`) cu bare/etichete fără suprapuneri, am detaliat geometria industrială (europaleți din lemn cu șipci, transportor inox cu role și portal SICK 2D, braț UR20 cu articulații albastre, siluetă operator poziționată corect) și am înlocuit fundalul demo cu o fotografie sintetică realistă de hală alimentară integrată local (`demo-factory-hall.jpg`, zero apeluri externe).
 - **Verificare:** 88/88 teste Vitest, `npm run check` (0 constatări), `npm run build` + `verify-dist.mjs`, inspecție vizuală pe screenshot-uri Tab 1 & Tab 2 și verificare overflow mobil real la 360px (`scrollWidth=345px <= 345px`).
 
-## 5. A treia corecție AI reală — Calibrare la scară reală & rază UR20 (PR #3)
-- **Ce lipsea inițial:** în Tab 2 (`Photo-Fit`), slider-ul liber de scară permitea redimensionarea arbitrară a robotului pe poză (fără scară fizică reală), iar verificarea inițială la colțul exterior al paletului dădea `1,79 m > 1,75 m` (raza maximă a UR20).
-- **Corecția echipei:** am adăugat calibrarea deterministă în 2 atingeri pe un europalet cunoscut (`1,2 m`) prin butonul `Calibrează scara pe poză`, desenarea inelului punctat `Rază UR20 1,75 m` și măsurarea corectă la punctul real de plasare a găleții (`15 cm` în interiorul marginii paletului → `1,59 m <= 1,75 m`). Nu pretindem reconstrucție 3D AI din poză (rămâne transparent pe roadmap V2).
-- **Verificare:** 91/91 teste Vitest verzi, build în `docs/` și smoke-test live pe `https://paletcheck-ur20-techcon.netlify.app`.
+## 5. Decizie de calitate și simplitate — Eliminarea prototipului Photo-Fit înainte de predare
+- **Ce am testat:** am implementat și testat un tab experimental `Photo-Fit` (suprapunere 2D/izometrică peste o poză a halei + calibrare în 2 puncte pe europalet).
+- **Decizia echipei (calitate > feature-bloat):** la testarea reală pe dispozitiv, proiecția peste poze cu unghiuri arbitrare nu a oferit o experiență suficient de fiabilă pentru un demo live în fața juriului. Conform regulii de zero funcționalități fragile, am eliminat complet `Photo-Fit` și am păstrat doar modulul determinist, rapid și curat **Previzualizare 3D / Plan 2D celulă UR20** (cu verificare gabarit, direcție transportor, 1–2 celule și simulare zone SICK).
+- **Verificare:** toate testele Vitest verzi, bundle curat (fără asset-uri inutile) și smoke-test live pe `https://paletcheck-ur20-techcon.netlify.app`.
 
 Toate datele din aplicație și din acest jurnal sunt fictive (emailuri `.example`).

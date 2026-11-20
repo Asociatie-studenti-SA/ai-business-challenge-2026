@@ -10,9 +10,6 @@
     "demo_button_label": "Încarcă caz normal (Demo)",
     "error_demo_button_label": "Testează date lipsă / erori",
     "primary_cta_label": "Evaluează compatibilitatea UR20",
-    "photo_fit_calibrate_label": "Calibrează scara pe poză",
-    "ur20_reach_m": 1.75,
-    "max_bucket_place_reach_m": 1.59,
     "demo_input_summary": "SC LactoSud Demo SRL, Ilfov, 13 kg + 3 kg gripper = 16 kg, 6.5 galeti/min, 2 schimburi, 2 operatori",
     "demo_expected_output": "Compatibil pentru evaluare tehnică (16/20 kg UR20, schimb palet ~6.8 min, hub Dragomirești-Deal)"
   },
