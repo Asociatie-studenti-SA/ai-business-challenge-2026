@@ -298,7 +298,7 @@ export function GuideChatbot({
   };
 
   return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40 flex flex-col items-end p-3 sm:p-4">
+    <div className="pointer-events-none fixed inset-x-0 bottom-16 z-40 flex flex-col items-end p-3 sm:p-4">
       {/* Compact mobile peek bar when user clicks "Arata-mi pe pagina" on narrow screens */}
       {isOpen && peekLabel !== null ? (
         <div className="pointer-events-auto flex w-full max-w-md items-center justify-between gap-2 rounded-xl border-2 border-teal-700 bg-white px-3.5 py-2.5 shadow-xl">
@@ -324,7 +324,7 @@ export function GuideChatbot({
         <section
           role="dialog"
           aria-label="Ghid interactiv PaletCheck UR20"
-          className="pointer-events-auto flex h-[min(78vh,580px)] w-[calc(100vw-1.5rem)] max-w-md flex-col overflow-hidden rounded-2xl border border-slate-300 bg-white shadow-2xl"
+          className="pointer-events-auto flex h-[min(72vh,540px)] w-[calc(100vw-1.5rem)] max-w-md flex-col overflow-hidden rounded-2xl border border-slate-300 bg-white shadow-2xl"
         >
           {/* Header */}
           <div className="flex items-center justify-between gap-2 bg-teal-700 px-4 py-3 text-white">
