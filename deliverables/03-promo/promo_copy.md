@@ -10,6 +10,6 @@ Repere concrete din aplicația PURATOS:
 - Scop transparent: paleții și separatoarele se gestionează manual, iar cifrele FAT sunt repere ale testului PURATOS, nu garanții universale.
 
 Evaluează linia în 60 de secunde, gratuit și fără cont, în PaletCheck UR20, cu rutare automată către Dragomirești-Deal, Timișoara sau Iași:
-https://asociatie-studenti-sa.github.io/ai-business-challenge-2026/
+https://paletcheck-ur20-techcon.netlify.app
 
 #IndustrieAlimentara #AutomatizareIndustriala #PaletizareUR20 #TechConIndustry

@@ -1,6 +1,6 @@
 # PaletCheck UR20 – Instrucțiuni de test
 
-URL live: <se completează după deploy>
+URL live: https://paletcheck-ur20-techcon.netlify.app
 
 Toate datele de test sunt fictive (firme demo, adrese email cu domeniul `.example`). Nu este nevoie de cont sau autentificare.
 
@@ -28,3 +28,22 @@ Verificări opționale:
    - sub Ritm linie: `Câmp obligatoriu – introdu o valoare numerică.`
    - sub Greutate găleată: `Sarcina totală 21 kg (găleată + gripper) depășește limita UR20 de 20 kg.`
    - sub bifa de confirmare manuală: `Confirmă că schimbarea paleților și amplasarea separatoarelor rămân manuale.`
+
+## Caz 3 – Previzualizare 3D & Photo-Fit (scară reală pe poză)
+
+1. În secțiunea `Previzualizare spațiu și amplasare celulă UR20`, verifică tabul `Previzualizare 3D / Izometrică`:
+   - Schimbă între 1 celulă și 2 celule UR20 și verifică avertizarea de spațiu dacă dimensiunile introduse scad sub gabaritul necesar (`3,8 m × 3,4 m` pentru 1 celulă; `6,2 m × 3,8 m` pentru 2 celule).
+2. Apasă tabul `Photo-Fit: Suprapunere pe Poza Halei`:
+   - Fundalul demo (`Hală producție alimentară demo (sintetică)`) se încarcă automat (sau poate fi reîncărcat prin `Încarcă poză hală demo`, ori înlocuit cu o poză proprie prin `Încarcă poza halei (camera sau fișier local)`).
+   - Verifică selecția `Obiect de referință pe podea`: `Europalet – latura lungă (1,2 m)` (sau `0,8 m` / `1,0 m`).
+   - Apasă butonul `Calibrează scara pe poză`.
+   - Atinge 2 puncte pe podea corespunzătoare laturii de `1,2 m` a europaletului.
+   - Rezultat:
+     - Celula UR20 se redimensionează la scară reală aproximativă lângă linia marcată și afișează cercul punctat de rază `Rază UR20 1,75 m`.
+     - Sub imagine apare statusul verde: `Paleții sunt în raza UR20: cel mai îndepărtat punct de plasare la 1,59 m din 1,75 m.` (notă tehnică: colțul exterior al paletului este la `1,79 m`, dar gălețile sunt plasate cu `15 cm` spre interior, deci cel mai îndepărtat punct de plasare este la `1,59 m <= 1,75 m`).
+     - Apare mesajul `Scară reală setată: 1 m ≈ <N> px pe poză. Scara este corectă lângă linia marcată; perspectiva pozei micșorează zonele îndepărtate.`
+   - Apasă `Descarcă schița (.png)` pentru a descărca imaginea compusă (`schita-ur20-photofit.png`).
+
+Notă pentru prezentare (scenă):
+- Scara vine din 2 atingeri pe un europalet de `1,2 m` (nu din reconstrucție AI 3D a halei; reconstrucția automată din poză/video rămâne pe roadmap V2).
+- Nu afirma că brațul atinge colțul exterior al paletului (`1,79 m`); punctele de plasare a găleților sunt la max. `1,59 m <= 1,75 m`.
