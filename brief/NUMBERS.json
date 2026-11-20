@@ -1,5 +1,5 @@
 {
-  "status": "INITIAL_DRAFT",
+  "status": "LOCKED",
   "project_name": "PaletCheck UR20 (Tech-Con Industry)",
   "output_language": "ro",
   "currency": "EUR",
@@ -47,9 +47,9 @@
     "won_clients": 12,
     "avg_cells_per_client": 1.42,
     "cells_sold_and_delivered": 17,
-    "cost_per_relevant_request": 250,
+    "cost_per_relevant_request": 250.0,
     "cost_per_technical_meeting": 555.56,
-    "cost_per_won_client": 2500,
+    "cost_per_won_client": 2500.0,
     "promo_cost_per_cell": 1764.71
   },
   "summary_year_1": {
@@ -62,11 +62,17 @@
     "net_profit": 310000,
     "break_even_month": 2,
     "break_even_units_per_month": 2,
-    "gross_margin_pct": 15.4
+    "gross_margin_pct": 15.4,
+    "net_profit_note": "310.000 EUR = rezultat dupa promovare, INAINTE de regie indirecta si impozit (date lipsa in brief). Profit net indicativ dupa impozit 16%, fara regie: 260.400 EUR.",
+    "net_profit_indicative_after_16pct_tax_no_overhead": 260400,
+    "break_even_note": "break_even_month si break_even_units_per_month = prag acoperire promovare in CELULE (2), nu luni."
   },
   "puratos_reference_facts": {
     "cells_implemented": 2,
-    "bucket_weights_kg": [5, 13],
+    "bucket_weights_kg": [
+      5,
+      13
+    ],
     "buckets_per_pallet_5kg": 100,
     "buckets_per_pallet_13kg": 44,
     "manual_before": "2 operatori/schimb, 2-3 schimburi/zi",
@@ -79,7 +85,11 @@
     "pallet_positions_per_cell": 2,
     "manual_steps_remaining": "Schimbare paleți și amplasare separatoare",
     "out_of_scope": "Transport paleți logistică (MiR), înfoliere, expediere",
-    "techcon_hubs_ro": ["Dragomirești-Deal", "Iași", "Timișoara"]
+    "techcon_hubs_ro": [
+      "Dragomirești-Deal",
+      "Iași",
+      "Timișoara"
+    ]
   },
   "brief_data_references": [
     "Buget anual promovare: 30.000 EUR (plafon maxim, EUR fără TVA)",
@@ -88,5 +98,53 @@
     "Țintă acționari: 300.000 EUR profit net/an (alte costuri & impozit neprecizate)",
     "FAT PURATOS: 7,4 găleți/min (13 kg, +23%) și 8,6 găleți/min (5 kg, +43%), țintă >=6/min, livrare ~4 luni",
     "Sedii Tech-Con România: Dragomirești-Deal, Iași, Timișoara"
-  ]
+  ],
+  "locked_by": "cfo (deliverables/02-finance/financial_model.xlsx)",
+  "promo_pacing_quarterly_pct": {
+    "Q1": 0.35,
+    "Q2": 0.3,
+    "Q3": 0.2,
+    "Q4": 0.15,
+    "Q1_Q2_front_loaded": 0.65
+  },
+  "promo_pacing_quarterly_eur": {
+    "Q1": 10500,
+    "Q2": 9000,
+    "Q3": 6000,
+    "Q4": 4500
+  },
+  "promo_reallocation_rule": {
+    "review_after_days": 45,
+    "max_cost_per_relevant_request_eur": 400,
+    "cut_underperforming_channel_pct": 0.5,
+    "dedup": "un client din mai multe canale se numara o singura data"
+  },
+  "net_profit_check": {
+    "corporate_tax_rate_ro": 0.16,
+    "pretax_profit_needed_for_300k_net": 357143,
+    "missing_data": [
+      "regie indirecta vanzari",
+      "service & garantie",
+      "alte costuri fixe alocate",
+      "confirmare cota impozit"
+    ],
+    "recommended_buffer_cells": 3,
+    "commercial_target_with_buffer_cells": 20,
+    "recommended_reserve_pct_range": "10-15%",
+    "net_profit_indicative_at_buffer_target_no_overhead": 310800
+  },
+  "hub_delivery_split": {
+    "cells": {
+      "Dragomirești-Deal": 9,
+      "Timișoara": 4,
+      "Iași": 4
+    },
+    "install_capacity_per_quarter": {
+      "Dragomirești-Deal": 3,
+      "Timișoara": 2,
+      "Iași": 2
+    },
+    "delivery_window_months": 8,
+    "capacity_in_window_cells": 18
+  }
 }
