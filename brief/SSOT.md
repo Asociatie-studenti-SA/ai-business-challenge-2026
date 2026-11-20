@@ -55,15 +55,15 @@
 - **Three Implementation Steps:**
   1. **Pas 1 (Q1 — Ian–Mar | Fundație & Lansare Sud/Vest):** Lansare `PaletCheck UR20` + studiu de caz PURATOS + campanii Google Search, LinkedIn și outreach direct CAEN 10xx din Dragomirești-Deal & Timișoara (țintă: 40 cereri relevante, 18 întâlniri, primele 5 celule contractate).
   2. **Pas 2 (Q2 — Apr–Iun | Accelerare Națională & Cut-off Livrare An Curent):** Extindere Iași + 3 webinare cu asociații alimentare + realocare buget din rezerva de 2.500 EUR pe baza costului/cerere la 45 zile (țintă cumulată: 95 cereri, 42 întâlniri, 17 celule contractate până la final de august pt. livrare în ~4 luni).
-  3. **Pas 3 (Q3–Q4 — Iul–Dec | Livrare, Instalare & Pipeline Anul 2):** Instalare și instruire celule pe cele 3 hub-uri (capacitate ~4–5 celule/trimestru), audit financiar profit net (includere regie + impozit 16%), construire pipeline Q1 Anul 2.
+  3. **Pas 3 (Q3–Q4 — Iul–Dec | Livrare, Instalare & Pipeline Anul 2):** Instalare și instruire celule pe cele 3 hub-uri (**capacitate 7 celule/trimestru**: Dragomirești-Deal 3, Timișoara 2, Iași 2 → **18 celule capacitate în fereastra de livrare de 8 luni**, acoperind ținta de 17 celule), audit financiar profit net (includere regie indirectă + impozit 16% → ~260.400 EUR indicativ fără regie; țintă comercială cu rezervă = **20 celule**, 17 + 3 buffer), construire pipeline Q1 Anul 2.
 
 ## 6. Facts Sheet & Verbatim UI Words (Updated Immediately After App Build)
 > **CRITICAL:** Strategy, Promo, Pitch, and `DEMO_INSTRUCTIONS.md` MUST quote these exact strings and numbers.
 
-- **Live App URL:** `https://asociatie-studenti-sa.github.io/ai-business-challenge-2026/` *(sau URL Netlify după deploy — Coleg 1 actualizează exact după publicare!)*
+- **Live App URL:** `https://paletcheck-ur20-techcon.netlify.app`
 - **Exact Demo Button Label (Normal Case):** `Încarcă caz normal (Demo)`
 - **Exact Demo Button Label (Error/Missing Case):** `Testează date lipsă / erori`
 - **Exact Primary Submit/Action Button Label:** `Evaluează compatibilitatea UR20`
 - **Demo Input Summary:** `SC LactoSud Demo SRL | Ilfov | Industrie alimentară (Lactate) | Găleată 13 kg + gripper 3 kg = 16 kg | 6,5 găleți/min | 2 schimburi, 2 operatori | Paleți & separatoare manual`
 - **Demo Expected Output (verbatim target):** `Compatibil pentru evaluare tehnică • 16 kg / 20 kg UR20 • 6,5 vs 7,4 găleți/min (reper FAT) • Schimb palet la ~6,8 min (44 găleți/palet) • Hub: Dragomirești-Deal`
-- **App Stack & Deploy Target:** `React + Vite + Tailwind in app/ built to docs/ (base: './') -> GitHub Pages (or Netlify CLI fallback)`
+- **App Stack & Deploy Target:** `React + Vite + Tailwind in app/ built to docs/ (base: './') -> deployed LIVE on Netlify (https://paletcheck-ur20-techcon.netlify.app, siteId: f705fe01-7c55-4d2f-9d5f-37c12c174dea)`

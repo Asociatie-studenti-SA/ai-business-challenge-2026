@@ -5,7 +5,7 @@
   "currency": "EUR",
   "tax_note": "EUR fără TVA",
   "period": "1 an calendaristic (1 ianuarie – 31 decembrie)",
-  "live_app_url": "https://asociatie-studenti-sa.github.io/ai-business-challenge-2026/",
+  "live_app_url": "https://paletcheck-ur20-techcon.netlify.app",
   "ui_contract": {
     "demo_button_label": "Încarcă caz normal (Demo)",
     "error_demo_button_label": "Testează date lipsă / erori",

@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+/* System font stack only: no requests to font CDNs (Req 10.13). */
+@theme {
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+    "Noto Sans", "Liberation Sans", sans-serif;
+}
+
+html {
+  font-family: var(--font-sans);
+}
+
+/* Visible keyboard focus: teal-700 on slate-50, about 5.2:1 (Req 10.5). */
+:focus-visible {
+  outline: 2px solid #0f766e;
+  outline-offset: 2px;
+}
+
+/* Reduced motion: no transitions, animations or press-scale transforms (Req 10.7). */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+    scroll-behavior: auto !important;
+  }
+  [class*="active:scale"]:active {
+    transform: none !important;
+    scale: none !important;
+  }
+}
