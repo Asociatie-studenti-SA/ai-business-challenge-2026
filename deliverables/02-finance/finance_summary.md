@@ -1,7 +1,7 @@
 # Sumar model financiar - PaletCheck UR20 (Tech-Con Industry)
 
 Scenariu de bază, EUR fără TVA, 1 an calendaristic (1 ian - 31 dec). Se numără doar celulele vândute **și livrate** în an.
-Sursă unică: `deliverables/02-finance/financial_model.xlsx` (3 foi, 99 formule Excel live, `fullCalcOnLoad=1`, 0 erori). Generat de `build_techcon_model.py`.
+Sursă unică: `deliverables/02-finance/financial_model.xlsx` (7 foi, 453 formule Excel live, `fullCalcOnLoad=1`, 0 erori la recalcularea în Excel). Generat de `build_techcon_model.py`.
 
 ## 1. Buget promovare 30.000 EUR (foaia `Buget Promovare 30k EUR`)
 
@@ -22,7 +22,7 @@ Regula de stop: la 45 de zile, un canal cu cost/cerere relevantă peste 400 EUR 
 
 ## 2. Funnel și rezultate (foaia `Model Comercial & Funnel`)
 
-120 cereri relevante → 45% → **54 întâlniri tehnice** → 22,2% → **12 clienți** × 1,42 celule/client → **17 celule**.
+120 cereri relevante → 45% → **54 întâlniri tehnice** → 22,22% (0,2222 × 54 = 11,99, rotunjit) → **12 clienți** × 1,42 celule/client → **17 celule**.
 
 | Indicator | Valoare | Calcul |
 | :--- | ---: | :--- |
@@ -32,9 +32,9 @@ Regula de stop: la 45 de zile, un canal cu cost/cerere relevantă peste 400 EUR 
 | Cost direct anual | 1.870.000 EUR | 17 × 110.000 |
 | Rezultat după promovare, înainte de alte costuri și impozit | 310.000 EUR | 17 × 20.000 - 30.000 |
 | Cost / cerere relevantă | 250 EUR | 30.000 / 120 |
-| Cost / întâlnire tehnică | 556 EUR | 30.000 / 54 |
+| Cost / întâlnire tehnică | ≈556 EUR (555,56) | 30.000 / 54 |
 | Cost / client câștigat | 2.500 EUR | 30.000 / 12 |
-| Cost promovare / celulă | 1.765 EUR | 30.000 / 17 |
+| Cost promovare / celulă | ≈1.765 EUR (1.764,71) | 30.000 / 17 |
 | Marjă de contribuție | 15,4% | 20.000 / 130.000 |
 | Prag acoperire promovare | 2 celule | ROUNDUP(30.000 / 20.000) |
 | Prag țintă 300.000 EUR înainte de alte costuri | 17 celule | ROUNDUP(330.000 / 20.000) |
@@ -65,3 +65,20 @@ Fereastra de livrare în an = 12 - 4 = 8 luni → capacitate 18 celule (utilizar
 - **De ce 17 celule?** (300.000 + 30.000) / 20.000 = 16,5 → 17. Asta este înainte de regie și impozit.
 - **Și profitul net?** Cu impozit 16% trebuie 20 de celule. De aceea ținta comercială are buffer de +3 celule.
 - **Bugetul ajunge?** Promovarea se acoperă din 2 celule. Costul este 2.500 EUR pe client câștigat.
+
+## 6. Foi noi (după evaluarea juriului simulat)
+
+Fișierul se deschide pe foaia `Sumar`: toți indicatorii ceruți de brief, legați prin formule de foile de calcul.
+
+**Calendar 12 luni & Cash.** Comenzi pe luni: 2, 2, 1, 2, 3, 3, 2, 2 (ian-aug), apoi 0. Livrarea vine după 4 luni, deci ultima comandă care se livrează în an este în **august**. Livrări pe trimestru: 0 / 4 / 6 / 7, toate sub capacitatea de 7 celule/trimestru (Dragomirești-Deal 9, Timișoara 4, Iași 4).
+- Break-even pe luni (rezultat cumulat ≥ 0): **mai**, la primele 2 livrări.
+- Necesar maxim de finanțare: **125.500 EUR în aprilie**. Ipoteze de validat cu Tech-Con: avans client 30% la comandă, plată furnizori 50% la comandă.
+- Numerar la 31 decembrie: 310.000 EUR, egal cu rezultatul anual.
+
+**Canale & regula 45 zile.** Cereri relevante estimate pe canal (30 / 22 / 18 / 20 / 16 / 14 = 120), cost pe cerere între 200 și 250 EUR. Canalul peste 400 EUR sau fără cereri primește automat „Reduce 50%”. Banii eliberați și rezerva de 2.500 EUR merg la canalul cel mai ieftin.
+
+**Sensibilitate (1 variabilă).** Scenariul oficial rămâne unul singur. Testăm o singură ipoteză pe rând:
+- Pentru 300.000 EUR profit net (impozit 16%) sunt necesare 20 celule fără regie, **26** cu regie de 120.000 EUR și **29** cu regie de 180.000 EUR.
+- Dacă costul direct urcă la 120.000 EUR, sunt necesare 39 celule.
+- Dacă 3 celule alunecă în anul 2: 14 celule, rezultat 250.000 EUR.
+- Concluzie: ținta netă depinde de regia pe care Tech-Con trebuie să o comunice.

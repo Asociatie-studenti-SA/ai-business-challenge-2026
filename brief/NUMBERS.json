@@ -59,13 +59,11 @@
     "total_promo_costs": 30000,
     "result_after_promo_before_overhead_tax": 310000,
     "total_costs": 1900000,
-    "net_profit": 310000,
-    "break_even_month": 2,
-    "break_even_units_per_month": 2,
     "gross_margin_pct": 15.4,
     "net_profit_note": "310.000 EUR = rezultat dupa promovare, INAINTE de regie indirecta si impozit (date lipsa in brief). Profit net indicativ dupa impozit 16%, fara regie: 260.400 EUR.",
     "net_profit_indicative_after_16pct_tax_no_overhead": 260400,
-    "break_even_note": "break_even_month si break_even_units_per_month = prag acoperire promovare in CELULE (2), nu luni."
+    "break_even_note": "Prag acoperire promovare = 2 celule (unit_economics.promo_break_even_cells). Break-even pe luni (rezultat cumulat >= 0) = Mai, din foaia Calendar 12 luni & Cash.",
+    "break_even_month_cumulative": "Mai"
   },
   "puratos_reference_facts": {
     "cells_implemented": 2,
@@ -146,5 +144,50 @@
     },
     "delivery_window_months": 8,
     "capacity_in_window_cells": 18
+  },
+  "calendar_year_1": {
+    "orders_per_month": [
+      2,
+      2,
+      1,
+      2,
+      3,
+      3,
+      2,
+      2,
+      0,
+      0,
+      0,
+      0
+    ],
+    "deliveries_per_month": [
+      0,
+      0,
+      0,
+      0,
+      2,
+      2,
+      1,
+      2,
+      3,
+      3,
+      2,
+      2
+    ],
+    "deliveries_per_quarter": [
+      0,
+      4,
+      6,
+      7
+    ],
+    "last_order_month_for_delivery_in_year": "August",
+    "client_advance_at_order_pct": 0.3,
+    "supplier_payment_at_order_pct": 0.5,
+    "assumption_note": "Avans 30% si plata furnizor 50% la comanda = ipoteze de validat cu Tech-Con."
+  },
+  "sensitivity_cells_for_300k_net": {
+    "no_overhead": 20,
+    "overhead_120k": 26,
+    "overhead_180k": 29
   }
 }
