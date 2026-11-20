@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jurnal AI — PaletCheck UR20 (Tech-Con Industry)</title>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 10mm 11mm 10mm 11mm;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Inter", "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: #0f1d30;
+      background: #ffffff;
+      font-size: 9.2pt;
+      line-height: 1.38;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .page {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    /* Header */
+    .header {
+      border-bottom: 2.5px solid #0f766e;
+      padding-bottom: 7px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 12px;
+    }
+
+    .header-left .eyebrow {
+      font-size: 7.4pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #0f766e;
+      margin-bottom: 2px;
+    }
+
+    .header-left h1 {
+      font-size: 16pt;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #0f1d30;
+      line-height: 1.15;
+    }
+
+    .header-right {
+      text-align: right;
+      font-size: 8pt;
+      color: #334155;
+      line-height: 1.35;
+      flex-shrink: 0;
+    }
+
+    .header-right .url {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 7.6pt;
+      color: #0f766e;
+      font-weight: 600;
+    }
+
+    /* Section */
+    .section {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10pt;
+      font-weight: 700;
+      color: #0f1d30;
+      border-left: 3.5px solid #0f766e;
+      padding-left: 7px;
+      line-height: 1.2;
+    }
+
+    .section-title .num {
+      color: #0f766e;
+      font-weight: 800;
+    }
+
+    /* Tools Table */
+    table.tools {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 8.4pt;
+    }
+
+    table.tools th {
+      background: #0f1d30;
+      color: #ffffff;
+      text-align: left;
+      padding: 4px 7px;
+      font-weight: 600;
+      font-size: 7.8pt;
+      letter-spacing: 0.02em;
+    }
+
+    table.tools td {
+      border: 1px solid #cbd5e1;
+      padding: 4.5px 7px;
+      vertical-align: top;
+    }
+
+    table.tools tr:nth-child(even) td {
+      background: #f8fafc;
+    }
+
+    .tool-name {
+      font-weight: 700;
+      color: #0f1d30;
+      white-space: nowrap;
+    }
+
+    /* Prompts Grid */
+    .prompts-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 7px;
+    }
+
+    .prompt-card {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-top: 2.5px solid #0f766e;
+      border-radius: 4px;
+      padding: 6px 7.5px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .prompt-card .tag {
+      font-size: 7.4pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #0f766e;
+    }
+
+    .prompt-card .quote {
+      font-size: 7.85pt;
+      color: #1e293b;
+      line-height: 1.33;
+      font-style: italic;
+    }
+
+    /* Corrections Grid */
+    .corrections-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .corr-box {
+      border: 1px solid #cbd5e1;
+      border-left: 3.5px solid #b45309;
+      background: #fffbeb;
+      border-radius: 4px;
+      padding: 6.5px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 3.5px;
+    }
+
+    .corr-box.tech {
+      border-left-color: #0f766e;
+      background: #f0fdfa;
+    }
+
+    .corr-box h3 {
+      font-size: 8.6pt;
+      font-weight: 700;
+      color: #0f1d30;
+    }
+
+    .corr-box p {
+      font-size: 8.15pt;
+      color: #1e293b;
+      line-height: 1.35;
+    }
+
+    .corr-box strong {
+      color: #0f1d30;
+    }
+
+    .promo-note {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      padding: 5px 8px;
+      font-size: 8.15pt;
+      color: #1e293b;
+      line-height: 1.34;
+    }
+
+    /* Transparency Footer Box */
+    .compliance {
+      background: #f1f5f9;
+      border: 1px solid #94a3b8;
+      border-radius: 4px;
+      padding: 7px 9px;
+      font-size: 8.1pt;
+      color: #1e293b;
+      line-height: 1.37;
+    }
+
+    .compliance .comp-title {
+      font-weight: 700;
+      color: #0f1d30;
+      font-size: 8.6pt;
+      margin-bottom: 3px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #0f766e;
+      color: #ffffff;
+      font-size: 7pt;
+      font-weight: 700;
+      padding: 1.5px 6px;
+      border-radius: 3px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 7.7pt;
+      background: rgba(15, 29, 48, 0.06);
+      padding: 0.5px 3px;
+      border-radius: 2px;
+      color: #0f1d30;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <div class="header-left">
+        <div class="eyebrow">AI-Powered Business Challenge 2026 • UPB / FAIMA • Livrabil Jurnal AI</div>
+        <h1>Jurnal de Utilizare Critică a AI — PaletCheck UR20</h1>
+      </div>
+      <div class="header-right">
+        <div><strong>Client / Temă:</strong> Tech-Con Industry (celule paletizare UR20)</div>
+        <div><strong>Prototip live:</strong> <span class="url">https://paletcheck-ur20-techcon.netlify.app</span></div>
+      </div>
+    </header>
+
+    <section class="section">
+      <h2 class="section-title"><span class="num">1.</span> Instrumente AI utilizate și protocolul de verificare umană</h2>
+      <table class="tools">
+        <thead>
+          <tr>
+            <th style="width: 24%;">Instrument</th>
+            <th style="width: 39%;">Rol concret în fluxul echipei</th>
+            <th style="width: 37%;">Verificare umană &amp; automată aplicată</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="tool-name">Kiro (multi-agent)</td>
+            <td>Blocare SSOT (<code>SSOT.md</code>, <code>NUMBERS.json</code>) și generare paralelă pe ramuri Git: aplicație React/Vite (<code>app-builder</code>), model Excel <code>openpyxl</code> (<code>cfo</code>), afiș &amp; copy LinkedIn (<code>pr-marketer</code>).</td>
+            <td>Code review pe PR-uri, <strong>83/83 teste Vitest + fast-check</strong>, <code>check-src.mjs</code> (0 erori) și audit <code>check_consistency.py</code>.</td>
+          </tr>
+          <tr>
+            <td class="tool-name">Google Antigravity</td>
+            <td>Depanare vizuală Canvas 3D, eliminare funcții fragile, deploy producție Netlify și sincronizare contract UI verbatim între cod și documente.</td>
+            <td>Smoke-test live pe browser Headless Chrome (<strong>HTTP 200</strong>, verificare overflow mobil real <strong>360 px</strong>) și inspecție pe screenshot-uri.</td>
+          </tr>
+          <tr>
+            <td class="tool-name">Scripturi Python &amp; Chrome</td>
+            <td>Generare model financiar cu <strong>99 formule live</strong> (<code>fullCalcOnLoad=1</code>) și export determinist PDF/PNG (<code>1080×1350 @2x</code>, A4 1 pagină).</td>
+            <td>Evaluator independent de formule pe fiecare celulă Excel (0 erori <code>#REF!/#VALUE!</code>) și verificare strictă 1 pagină A4.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title"><span class="num">2.</span> Trei prompturi relevante din sprint (Tech, Finanțe, Promovare B2B)</h2>
+      <div class="prompts-grid">
+        <div class="prompt-card">
+          <div class="tag">Prompt 1 • Prototip Web (app-builder)</div>
+          <div class="quote">„Build PaletCheck UR20 — mobile-first, PWA-ready Romanian web tool (Slate + Deep Teal/Amber, zero violet, zero emoji, zero login wall) for Romanian food factory managers evaluating a Tech-Con UR20 cell, with exact buttons: «Încarcă caz normal (Demo)», «Testează date lipsă / erori», «Evaluează compatibilitatea UR20», «Generează cerere relevantă (CRM)».”</div>
+        </div>
+        <div class="prompt-card">
+          <div class="tag">Prompt 2 • Model Financiar (cfo)</div>
+          <div class="quote">„Write build_techcon_model.py (openpyxl, fullCalcOnLoad=True) generating financial_model.xlsx in Romanian with 3 formula-driven sheets: 7 promo lines summing via =SUM to 30,000 EUR (65% Q1–Q2, 45-day stop rule); funnel 120 → 54 → 12 → 17 cells; net-profit check with 16% tax, missing overhead note, +3 cell buffer and hub split. Zero hardcoded totals.”</div>
+        </div>
+        <div class="prompt-card">
+          <div class="tag">Prompt 3 • Campanie B2B (pr-marketer)</div>
+          <div class="quote">„Construiește promo_poster.html (1080×1350 @2x, Navy/Teal/Amber, comparație Înainte/După pe reperul FAT PURATOS, notă explicită că paleții și separatoarele rămân manuale) și promo_copy.md LinkedIn (130–170 cuvinte, zero clișee AI sau emoji, CTA spre PaletCheck UR20 cu rutare Dragomirești-Deal / Timișoara / Iași).”</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title"><span class="num">3.</span> Exemple concrete de rezultate AI verificate și corectate de echipă</h2>
+      <div class="corrections-grid">
+        <div class="corr-box">
+          <h3>A. Model financiar — Bug virgulă mobilă &amp; etichetă profit net</h3>
+          <p><strong>Rezultat inițial (AI):</strong> formula de control <code>Q1 + Q2 ≥ 65%</code> din foaia Buget afișa fals <em>„Atenție: sub 65% în S1”</em> deși alocarea era 35% + 30% = 65%. Separat, câmpul <code>net_profit = 310.000 EUR</code> risca să fie prezentat drept profit net final.</p>
+          <p><strong>Cum am detectat:</strong> am rulat un evaluator independent pe toate cele 99 formule (celula <code>C10</code> evalua la <code>0,6499999…</code>) și am verificat constrângerile brief-ului privind lipsa regiei indirecte și a impozitului.</p>
+          <p><strong>Corecția &amp; impactul:</strong> am încadrat cu <code>ROUND(...)</code> verificările <code>65% S1</code> și plafonul <code>30.000 EUR</code> (acum <code>OK</code>) și am diferențiat clar rezultatul înainte de regie/impozit (<code>310.000 EUR</code>) de profitul net indicativ după impozit 16% fără regie (<code>260.400 EUR</code>), propunând buffer comercial de <strong>20 celule</strong>.</p>
+        </div>
+
+        <div class="corr-box tech">
+          <h3>B. Aplicație web — Contract demo, ergonomie 3D &amp; tăiere funcție fragilă</h3>
+          <p><strong>Rezultat inițial (AI):</strong> specificația AI marca emailul gol drept eroare la evaluare (stricând demo-ul cu exact 3 erori), etichetele din Canvas 3D se suprapuneau peste paletul P2, iar un tab experimental <code>Photo-Fit</code> producea deformări de perspectivă pe fotografii reale.</p>
+          <p><strong>Cum am detectat:</strong> teste unitare Vitest/<code>fast-check</code>, inspecție vizuală pe capturi live și testare practică pe dispozitiv înainte de predare.</p>
+          <p><strong>Corecția &amp; impactul:</strong> am separat validarea evaluării de salvarea CRM (confirmat în <code>validator.test.ts</code>), am mutat adnotările 3D pe un strat superior fără suprapuneri și am <strong>eliminat complet Photo-Fit</strong> pentru a nu risca o funcție fragilă la demo — păstrând modulul determinist 3D/Plan 2D (83/83 teste verzi).</p>
+        </div>
+      </div>
+
+      <div class="promo-note">
+        <strong>C. Promovare B2B (conformitate &amp; design):</strong> am respins prima variantă AI (template dark-mode cu glow și supra-promisiunea „fără opriri”) și am refăcut <code>promo_poster.png</code> ca schemă tehnică SVG industrială pe fundal deschis, cu mențiuni explicite că <strong>7,4–8,6 găleți/min</strong> sunt <strong>rezultate FAT PURATOS</strong> (nu garanții universale), iar paleții și separatoarele rămân manuale.
+      </div>
+    </section>
+
+    <section class="compliance">
+      <div class="comp-title">
+        <span>4. Transparență, Resurse Pre-Configurate și Conformitate (Regulament Secț. 7 &amp; 9)</span>
+        <span class="badge">100% Date Fictive • GDPR OK</span>
+      </div>
+      <p>
+        Declarăm transparent utilizarea spațiului de lucru pre-configurat cu skill-uri Kiro și scripturi utilitare (<code>openpyxl</code>, <code>python-pptx</code>, Headless Chrome PDF/PNG/360 px) — <strong>zero conținut pre-generat pe tema Tech-Con</strong>; toate analizele, calculele și codul aplicației au fost construite în timpul concursului pe baza brief-ului oficial primit la ora 11:00. Structura preia protocolul de coordonare <code>github-multi-agent-skill</code> v1.2 și adaptări ale framework-urilor open-source (licență MIT/Apache): <code>anthropics/skills</code> (<em>frontend-design</em>), <code>coreyhaines31/marketingskills</code> (<em>product-marketing, copywriting, social</em>), <code>Leonxlnx/taste-skill</code> și <code>nextlevelbuilder/ui-ux-pro-max-skill</code>. Toate datele din aplicație, model și materiale promo sunt exclusiv sintetice/fictive (firme demo, adrese <code>.example</code>, zero date personale reale).
+      </p>
+    </section>
+  </div>
+</body>
+</html>
