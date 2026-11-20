@@ -79,7 +79,7 @@
     {
       "badge": "04 / Model Financiar (Scenariu de Bază — EUR fără TVA)",
       "title": "17 celule acoperă 310.000 EUR brut; 20 celule cu buffer impozit",
-      "subtitle": "Sursă: deliverables/02-finance/financial_model.xlsx (3 foi, 99 formule live, 0 erori)",
+      "subtitle": "Sursă: deliverables/02-finance/financial_model.xlsx (7 foi, 471 formule live, 0 erori)",
       "kpis": [
         { "value": "2.210.000 EUR", "label": "Venit anual (17 × 130.000 EUR)" },
         { "value": "310.000 EUR", "label": "Rezultat după promo (înainte de regie/impozit)" },
@@ -113,7 +113,7 @@
         {
           "title": "Erori AI reale corectate în cele 3 ore",
           "bullets": [
-            "Tech (app/): AI bloca evaluarea pe email gol (stricând demo-ul cu 3 erori) și desena etichete 3D sub palet → separat validarea CRM + strat superior (88/88 teste Vitest)",
+            "Tech (app/): AI bloca evaluarea pe email gol (stricând demo-ul cu 3 erori) și desena etichete 3D sub palet → separat validarea CRM + strat superior (91/91 teste Vitest)",
             "Finance (Excel): formula Q1+Q2 ≥ 65% dădea fals negativ din virgulă mobilă (0,64999) și 310k era etichetat «profit net» → ROUND() + notă explicită impozit 16%",
             "Promo (poster): prima variantă era un template generic dark-mode → refăcut cu taste-skill într-o schemă tehnică UR20 cu brațul stratificat corect peste europalet"
           ]
@@ -123,7 +123,7 @@
           "bullets": [
             "Prototip mobil live verificabil în 30 secunde (caz normal + caz erori + export CRM)",
             "Zero promisiuni false: faptele FAT PURATOS sunt separate clar de garanții și scop",
-            "Model financiar editabil (99 formule) pregătit pentru introducerea regiei reale Tech-Con"
+            "Model financiar editabil (471 formule) pregătit pentru introducerea regiei reale Tech-Con"
           ]
         }
       ]

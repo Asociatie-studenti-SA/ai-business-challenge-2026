@@ -28,7 +28,7 @@
 ---
 
 ### [2:00 – 2:30] Slide 4 — Model Financiar (Coleg 2)
-„Din `financial_model.xlsx` (99 formule live): **130.000 EUR** preț minus **110.000 EUR** cost direct înseamnă **20.000 EUR** contribuție/celulă, deci bugetul de promovare se acoperă din **2 celule**. La **17 celule**: **2.210.000 EUR** venit și **310.000 EUR** rezultat după promovare. Spunem transparent acționarilor: **310.000 EUR nu este profit net**, pentru că lipsesc regia și impozitul. Cu 16% impozit, 17 celule lasă **260.400 EUR**; pentru **300.000 EUR net** propunem o țintă comercială cu buffer de **20 de celule**.”
+„Din `financial_model.xlsx` (471 formule live): **130.000 EUR** preț minus **110.000 EUR** cost direct înseamnă **20.000 EUR** contribuție/celulă, deci bugetul de promovare se acoperă din **2 celule**. La **17 celule**: **2.210.000 EUR** venit și **310.000 EUR** rezultat după promovare. Spunem transparent acționarilor: **310.000 EUR nu este profit net**, pentru că lipsesc regia și impozitul. Cu 16% impozit, 17 celule lasă **260.400 EUR**; pentru **300.000 EUR net** propunem o țintă comercială cu buffer de **20 de celule**.”
 
 ---
 

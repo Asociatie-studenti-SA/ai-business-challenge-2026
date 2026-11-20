@@ -16,6 +16,6 @@ Respectăm scopul PURATOS: paleții și separatoarele rămân manuale; MiR, înf
 Zero date reale: fără cont, doar domenii `.example`, salvare strict locală în browser.
 
 **6. Juriu AI — 1 eroare AI reală per coleg:**
-- **C1 (Tech):** AI bloca evaluarea pe email gol (4 erori vs. 3) și punea etichete 3D sub palet → validare CRM separată + strat superior (88/88 teste).
+- **C1 (Tech):** AI bloca evaluarea pe email gol (4 erori vs. 3) și punea etichete 3D sub palet → validare CRM separată + strat superior (91/91 teste).
 - **C2 (Finance):** Formula `Q1+Q2 ≥ 65%` dădea fals negativ (`0,64999`) și eticheta 310k ca profit net → `ROUND()` + impozit 16%.
 - **C3 (PR):** Primul poster era generic dark-mode → refăcut cu `taste-skill` în schemă tehnică UR20 cu brațul peste europalet.
