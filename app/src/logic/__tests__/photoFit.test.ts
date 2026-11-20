@@ -155,11 +155,11 @@ const calibCfg: CellConfig = {
 
 describe('Photo-Fit real-scale calibration', () => {
   it('calibrates real scale from a 1,2 m europallet edge', () => {
-    const t = calibrateTransform({ x: 100, y: 200 }, { x: 160, y: 200 }, 1.2, 800, 450, calibCfg, { ...DEFAULT_T });
+    const t = calibrateTransform({ x: 100, y: 200 }, { x: 140, y: 200 }, 1.2, 800, 450, calibCfg, { ...DEFAULT_T });
     expect(t).not.toBeNull();
     const { w, h } = overlayBox(800, 450);
     const vp = computeViewport(w, h, calibCfg, true);
-    expect(t!.scale * vp.pxPerMeter).toBeCloseTo(50, 5);
+    expect(t!.scale * vp.pxPerMeter).toBeCloseTo(40 / 1.2, 5);
   });
 
   it('rejects calibration points closer than 10 px', () => {
@@ -170,5 +170,16 @@ describe('Photo-Fit real-scale calibration', () => {
     const pose = computeUr20ArmPose(0, 6.5, 'free');
     expect(maxPlaceReachM(calibCfg, pose)).toBeLessThanOrEqual(1.75);
     expect(maxPlaceReachM({ ...calibCfg, cellCount: 2, widthM: 6.5 }, pose)).toBeLessThanOrEqual(1.75);
+  });
+});
+
+describe('Photo-Fit keeps the cell inside the photo', () => {
+  it('caps a too-large real scale so the whole cell fits the frame', () => {
+    const t = calibrateTransform({ x: 100, y: 300 }, { x: 400, y: 300 }, 1.2, 800, 450, calibCfg, { ...DEFAULT_T });
+    expect(t).not.toBeNull();
+    const { w, h } = overlayBox(800, 450);
+    expect(t!.scale * w).toBeLessThanOrEqual(800);
+    expect(t!.scale * h).toBeLessThanOrEqual(450);
+    expect(t!.fittedToFrame).toBe(true);
   });
 });

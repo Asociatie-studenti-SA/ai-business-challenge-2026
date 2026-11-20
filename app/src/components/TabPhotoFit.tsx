@@ -17,6 +17,7 @@ import {
   exportPhotoFitPng,
   type PhotoOverlayTransform,
   calibrateTransform,
+  wasFittedToFrame,
   maxPlaceReachM,
   UR20_REACH_M,
   type CalibPoint,
@@ -218,11 +219,17 @@ export function TabPhotoFit({
       setCalibStep(0);
       setCalibP1(null);
       if (next && p1) {
-        setTransform(next);
+        const fitted = wasFittedToFrame(next);
+        const { xNorm, yNorm, scale, rotationDeg } = next;
+        setTransform({ xNorm, yNorm, scale, rotationDeg });
         setErrorMsg(null);
         const pxPerM = Math.round(Math.hypot(pt.x - p1.x, pt.y - p1.y) / calibRefM);
         setCalibInfo(`Scară reală setată: 1 m ≈ ${pxPerM} px pe poză.`);
-        setStatusMsg('Celula UR20 este acum la scară reală aproximativă în zona marcată.');
+        setStatusMsg(
+          fitted
+            ? 'La scară reală celula UR20 este mai mare decât cadrul pozei, așa că o afișăm micșorată ca să încapă. Fă poza de mai departe pentru scară 1:1.'
+            : 'Celula UR20 este acum la scară reală aproximativă lângă zona marcată.',
+        );
       } else {
         setErrorMsg('Punctele sunt prea apropiate. Apasă din nou „Calibrează scara pe poză”.');
       }

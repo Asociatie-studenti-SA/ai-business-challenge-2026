@@ -446,17 +446,29 @@ export function calibrateTransform(
   stageH: number,
   config: CellConfig,
   prev: PhotoOverlayTransform,
-): PhotoOverlayTransform | null {
+): (PhotoOverlayTransform & { fittedToFrame?: boolean }) | null {
   const distPx = Math.hypot(p2.x - p1.x, p2.y - p1.y);
   if (!(refLengthM > 0) || distPx < 10 || stageW <= 0 || stageH <= 0) return null;
   const { w, h } = overlayBox(stageW, stageH);
   const vp = computeViewport(w, h, config, true);
-  return clampPhotoTransform({
+  const realScale = distPx / refLengthM / vp.pxPerMeter;
+  // Keep the whole cell inside the photo: cap the scale and keep the center away from the edges.
+  const maxScale = Math.min((stageW * 0.96) / w, (stageH * 0.96) / h);
+  const scale = Math.min(realScale, maxScale);
+  const halfW = Math.min(0.5, (w * scale) / 2 / stageW);
+  const halfH = Math.min(0.5, (h * scale) / 2 / stageH);
+  const t = clampPhotoTransform({
     ...prev,
-    scale: distPx / refLengthM / vp.pxPerMeter,
-    xNorm: (p1.x + p2.x) / 2 / stageW,
-    yNorm: (p1.y + p2.y) / 2 / stageH,
+    scale,
+    xNorm: clamp((p1.x + p2.x) / 2 / stageW, halfW, 1 - halfW),
+    yNorm: clamp((p1.y + p2.y) / 2 / stageH - halfH * 0.35, halfH, 1 - halfH),
   });
+  return { ...t, fittedToFrame: realScale > maxScale };
+}
+
+/** True when the real-scale cell was bigger than the photo frame and was shrunk to fit. */
+export function wasFittedToFrame(t: PhotoOverlayTransform | null): boolean {
+  return Boolean(t && (t as PhotoOverlayTransform & { fittedToFrame?: boolean }).fittedToFrame);
 }
 
 /** Largest distance from a UR20 base to a bucket place point (meters). */
