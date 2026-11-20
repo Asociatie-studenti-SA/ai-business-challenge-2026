@@ -21,13 +21,13 @@
   "unit_economics": {
     "direct_cost_per_cell": 110000,
     "contribution_per_cell": 20000,
-    "gross_margin_pct": 15.4,
     "annual_promo_budget_cap": 30000,
     "shareholder_net_profit_target": 300000,
     "promo_break_even_cells": 2,
     "target_cells_before_overhead_tax": 17,
     "indicative_cells_with_16pct_tax_only": 20,
-    "delivery_lead_time_months": 4
+    "delivery_lead_time_months": 4,
+    "contribution_margin_pct": 15.4
   },
   "promo_budget_allocation_eur": {
     "google_search": 6500,
@@ -59,11 +59,11 @@
     "total_promo_costs": 30000,
     "result_after_promo_before_overhead_tax": 310000,
     "total_costs": 1900000,
-    "gross_margin_pct": 15.4,
     "net_profit_note": "310.000 EUR = rezultat dupa promovare, INAINTE de regie indirecta si impozit (date lipsa in brief). Profit net indicativ dupa impozit 16%, fara regie: 260.400 EUR.",
     "net_profit_indicative_after_16pct_tax_no_overhead": 260400,
     "break_even_note": "Prag acoperire promovare = 2 celule (unit_economics.promo_break_even_cells). Break-even pe luni (rezultat cumulat >= 0) = Mai, din foaia Calendar 12 luni & Cash.",
-    "break_even_month_cumulative": "Mai"
+    "break_even_month_cumulative": "Mai",
+    "contribution_margin_pct": 15.4
   },
   "puratos_reference_facts": {
     "cells_implemented": 2,
@@ -183,6 +183,12 @@
     "last_order_month_for_delivery_in_year": "August",
     "client_advance_at_order_pct": 0.3,
     "supplier_payment_at_order_pct": 0.5,
+    "break_even_month": "Mai",
+    "peak_funding_need_eur": 125500,
+    "peak_funding_need_month": "Aprilie",
+    "peak_funding_need_no_client_advance_eur": 471500,
+    "peak_funding_need_no_client_advance_month": "Iulie",
+    "hub_capacity_slack_busiest_quarter": 0,
     "assumption_note": "Avans 30% si plata furnizor 50% la comanda = ipoteze de validat cu Tech-Con."
   },
   "sensitivity_cells_for_300k_net": {
