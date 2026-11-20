@@ -1,0 +1,132 @@
+{
+  "project_name": "PaletCheck UR20 — Tech-Con Industry",
+  "slides": [
+    {
+      "badge": "01 / Problema & Oportunitatea",
+      "title": "Paletizarea manuală a găleților de 5–15 kg blochează fabricile",
+      "subtitle": "PaletCheck UR20 califică în 60s compatibilitatea liniei pe telefon și rutează cererea către cel mai apropiat sediu Tech-Con.",
+      "kpis": [
+        { "value": "2 op./schimb", "label": "Reper manual PURATOS (2–3 schimburi/zi)" },
+        { "value": "7,4–8,6/min", "label": "Ritm test FAT PURATOS (țintă ≥6/min)" },
+        { "value": "~4 luni", "label": "Livrare celulă UR20 (cut-off august)" }
+      ],
+      "cards": [
+        {
+          "title": "Blocajul real din fabrici și vânzări",
+          "bullets": [
+            "Găleți plastic 5 kg (100/palet) și 13 kg (44/palet) stivuite repetitiv manual",
+            "Directorii amână decizia: neclaritate pe sarcină (cu gripper ≤20 kg), mâner și blocaje aval",
+            "Fără pre-calificare, inginerii Tech-Con pierd ore pe cereri incomplete"
+          ]
+        },
+        {
+          "title": "Segment țintă (ICP) & Decident",
+          "bullets": [
+            "Fabrici alimentare din România (CAEN 10xx): panificație, lactate, sosuri, creme",
+            "Utilizator pe telefon: Director Producție, Plant Manager, Inginer Mentenanță",
+            "Decident bugetar CapEx: Director General / CFO (130.000 EUR/celulă, scenariu)"
+          ]
+        }
+      ]
+    },
+    {
+      "badge": "02 / Soluția & Demo Live (60s)",
+      "title": "PaletCheck UR20: pre-evaluare pe telefon lângă linia de producție",
+      "subtitle": "Live: https://paletcheck-ur20-techcon.netlify.app  |  Date fictive (.example), fără cont",
+      "cards": [
+        {
+          "title": "Caz 1 — Flux normal (Demo LactoSud)",
+          "bullets": [
+            "1. Apasă «Încarcă caz normal (Demo)» (Ilfov, 13 kg + 3 kg gripper, 6,5/min)",
+            "2. Apasă «Evaluează compatibilitatea UR20» → Verdict: Compatibil (16/20 kg, schimb palet ~6,8 min, Hub Dragomirești-Deal)",
+            "3. Apasă «Generează cerere relevantă (CRM)» → salvare locală deduplicată + export .json"
+          ]
+        },
+        {
+          "title": "Caz 2 — Validare erori & limite reale",
+          "bullets": [
+            "1. Apasă «Testează date lipsă / erori» apoi «Evaluează compatibilitatea UR20»",
+            "2. Blochează 3 erori: ritm lipsă, 21 kg > 20 kg UR20, confirmare manuală paleți nebifată",
+            "3. Scop transparent: paleți/separatoare manual; MiR, înfolierea și expedierea sunt excluse"
+          ]
+        }
+      ]
+    },
+    {
+      "badge": "03 / Strategie, Promovare & Scalare",
+      "title": "Buget 30.000 EUR concentrat 65% în S1 și 3 hub-uri naționale",
+      "subtitle": "Comenzile livrabile în anul calendaristic trebuie semnate până la final de august (~4 luni livrare).",
+      "cards": [
+        {
+          "title": "Atragere clienți & regulă buget",
+          "bullets": [
+            "Google Search 6.500 EUR + LinkedIn Ads 5.500 EUR + Studiu PURATOS 4.500 EUR",
+            "Outreach CAEN 10xx 4.000 EUR + Webinare asociații 3.500 EUR + PWA/SEO 3.500 EUR + Rezervă 2.500 EUR",
+            "Evaluare la 45 zile: canal >400 EUR/cerere se taie cu 50%; clienți deduplicați",
+            "Funnel: 120 cereri (250 EUR) → 54 întâlniri → 12 clienți (2.500 EUR/client) → 17 celule"
+          ]
+        },
+        {
+          "title": "Scalare în 3 pași (17 celule / 3 hub-uri)",
+          "bullets": [
+            "Pas 1 (Q1): Lansare PaletCheck + campanii Dragomirești-Deal & Timișoara (40 cereri, 5 celule)",
+            "Pas 2 (Q2–Aug): Extindere Iași + 3 webinare ROMPAN/APRIL + realocare rezervă (17 celule semnate)",
+            "Pas 3 (Q3–Q4): Instalare pe 3 hub-uri (Dragomirești-Deal 9, Timișoara 4, Iași 4; capacitate 18 în 8 luni)"
+          ]
+        }
+      ]
+    },
+    {
+      "badge": "04 / Model Financiar (Scenariu de Bază — EUR fără TVA)",
+      "title": "17 celule acoperă 310.000 EUR brut; 20 celule cu buffer impozit",
+      "subtitle": "Sursă: deliverables/02-finance/financial_model.xlsx (3 foi, 99 formule live, 0 erori)",
+      "kpis": [
+        { "value": "2.210.000 EUR", "label": "Venit anual (17 × 130.000 EUR)" },
+        { "value": "310.000 EUR", "label": "Rezultat după promo (înainte de regie/impozit)" },
+        { "value": "2 celule", "label": "Prag acoperire buget promovare (30k)" },
+        { "value": "20 celule", "label": "Țintă comercială cu buffer (+3 pt. 16%)" }
+      ],
+      "cards": [
+        {
+          "title": "Unit Economics & Funnel",
+          "bullets": [
+            "Preț 130.000 EUR − Cost direct 110.000 EUR = 20.000 EUR contribuție/celulă (15,4%)",
+            "17 × 20.000 − 30.000 promovare = 310.000 EUR rezultat înainte de regie și impozit",
+            "Cost promovare: 250 EUR/cerere, 556 EUR/întâlnire, 2.500 EUR/client, 1.765 EUR/celulă"
+          ]
+        },
+        {
+          "title": "Transparență Profit Net & Riscuri",
+          "bullets": [
+            "Date lipsă din brief: regie vânzări, service/garanție, cote fixe și impozit profit",
+            "Cu 16% impozit (fără regie): 17 celule → 260.400 EUR net; pt. 300k net → 20 celule (310.800 EUR)",
+            "Risc livrare: utilizare 94% (17/18 capacitate) → 65% buget în Q1–Q2 previne alunecarea în Anul 2"
+          ]
+        }
+      ]
+    },
+    {
+      "badge": "05 / Utilizarea Critică a AI & Concluzie",
+      "title": "Flux multi-agent verificat: 3 erori AI prinse și corectate de echipă",
+      "subtitle": "Testează acum pe telefon: https://paletcheck-ur20-techcon.netlify.app",
+      "cards": [
+        {
+          "title": "Erori AI reale corectate în cele 3 ore",
+          "bullets": [
+            "Tech (app/): AI bloca evaluarea pe email gol (stricând demo-ul cu 3 erori) și desena etichete 3D sub palet → separat validarea CRM + strat superior (88/88 teste Vitest)",
+            "Finance (Excel): formula Q1+Q2 ≥ 65% dădea fals negativ din virgulă mobilă (0,64999) și 310k era etichetat «profit net» → ROUND() + notă explicită impozit 16%",
+            "Promo (poster): prima variantă era un template generic dark-mode → refăcut cu taste-skill într-o schemă tehnică UR20 cu brațul stratificat corect peste europalet"
+          ]
+        },
+        {
+          "title": "De ce funcționează pentru Tech-Con",
+          "bullets": [
+            "Prototip mobil live verificabil în 30 secunde (caz normal + caz erori + export CRM)",
+            "Zero promisiuni false: faptele FAT PURATOS sunt separate clar de garanții și scop",
+            "Model financiar editabil (99 formule) pregătit pentru introducerea regiei reale Tech-Con"
+          ]
+        }
+      ]
+    }
+  ]
+}

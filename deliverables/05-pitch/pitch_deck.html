@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <title>PaletCheck UR20 — Pitch Deck (Tech-Con Industry)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
+  <style>
+    @page {
+      size: 13.333in 7.5in;
+      margin: 0;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-paper: #f3f5f7;
+      --white: #ffffff;
+      --navy: #0f1d30;
+      --slate: #334155;
+      --muted: #64748b;
+      --rule: #cbd5e1;
+      --teal: #0d6e6e;
+      --teal-bright: #14b8a6;
+      --teal-soft: #e6f4f4;
+      --amber: #d97706;
+      --amber-soft: #fef3c7;
+    }
+
+    body {
+      background: #cbd5e1;
+      font-family: "IBM Plex Sans", "Liberation Sans", "Noto Sans", sans-serif;
+      color: var(--navy);
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .slide {
+      width: 13.333in;
+      height: 7.5in;
+      background: var(--bg-paper);
+      padding: 0.46in 0.62in 0.36in 0.62in;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      page-break-after: always;
+      break-after: page;
+    }
+
+    .slide:last-child {
+      page-break-after: auto;
+      break-after: auto;
+    }
+
+    .slide.dark {
+      background: var(--navy);
+      color: #f8fafc;
+    }
+
+    /* Top accent bar */
+    .top-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: var(--teal);
+    }
+
+    .slide.dark .top-bar {
+      background: linear-gradient(90deg, var(--teal-bright) 0%, var(--amber) 100%);
+    }
+
+    /* Header */
+    .slide-header {
+      border-bottom: 1.5px solid var(--rule);
+      padding-bottom: 14px;
+    }
+
+    .slide.dark .slide-header {
+      border-bottom-color: rgba(148, 163, 184, 0.25);
+    }
+
+    .header-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .slide-kicker {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--teal);
+    }
+
+    .slide.dark .slide-kicker {
+      color: #5eead4;
+    }
+
+    .slide-timer {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .slide.dark .slide-timer {
+      color: #94a3b8;
+    }
+
+    h1 {
+      font-family: "Space Grotesk", "Liberation Sans", sans-serif;
+      font-size: 31px;
+      font-weight: 700;
+      line-height: 1.12;
+      letter-spacing: -0.8px;
+      color: var(--navy);
+      margin-bottom: 6px;
+    }
+
+    .slide.dark h1 {
+      color: #ffffff;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      line-height: 1.38;
+      color: var(--slate);
+    }
+
+    .slide.dark .subtitle {
+      color: #cbd5e1;
+    }
+
+    .url-inline {
+      font-family: "IBM Plex Sans", monospace;
+      font-weight: 700;
+      color: var(--teal);
+    }
+
+    .slide.dark .url-inline {
+      color: #5eead4;
+    }
+
+    /* Body area */
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 16px;
+      padding: 16px 0 12px 0;
+    }
+
+    /* KPI Strip */
+    .kpi-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .kpi-grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .kpi-box {
+      background: var(--white);
+      border: 1px solid var(--rule);
+      border-top: 3px solid var(--teal);
+      border-radius: 6px;
+      padding: 14px 18px;
+    }
+
+    .kpi-box.amber {
+      border-top-color: var(--amber);
+    }
+
+    .slide.dark .kpi-box {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(148, 163, 184, 0.22);
+      border-top: 3px solid var(--teal-bright);
+    }
+
+    .slide.dark .kpi-box.amber {
+      border-top-color: var(--amber);
+    }
+
+    .kpi-val {
+      font-family: "Space Grotesk", "Liberation Sans", sans-serif;
+      font-size: 30px;
+      font-weight: 700;
+      letter-spacing: -0.8px;
+      color: var(--teal);
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+
+    .kpi-box.amber .kpi-val {
+      color: var(--amber);
+    }
+
+    .slide.dark .kpi-val {
+      color: #5eead4;
+    }
+
+    .slide.dark .kpi-box.amber .kpi-val {
+      color: #fbbf24;
+    }
+
+    .kpi-lbl {
+      font-size: 13px;
+      line-height: 1.3;
+      color: var(--slate);
+    }
+
+    .slide.dark .kpi-lbl {
+      color: #cbd5e1;
+    }
+
+    /* Two-column cards */
+    .cols-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      flex: 1;
+    }
+
+    .cols-promo {
+      display: grid;
+      grid-template-columns: 1fr 1fr 3.05in;
+      gap: 16px;
+      flex: 1;
+      align-items: stretch;
+    }
+
+    .panel {
+      background: var(--white);
+      border: 1px solid var(--rule);
+      border-radius: 6px;
+      padding: 18px 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .panel.teal-top { border-top: 3px solid var(--teal); }
+    .panel.amber-top { border-top: 3px solid var(--amber); }
+
+    .slide.dark .panel {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(148, 163, 184, 0.22);
+    }
+
+    .panel-title {
+      font-family: "Space Grotesk", "Liberation Sans", sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .panel.amber-top .panel-title { color: #b45309; }
+    .panel.teal-top .panel-title { color: var(--teal); }
+
+    .slide.dark .panel-title {
+      color: #ffffff;
+      border-bottom-color: rgba(148, 163, 184, 0.2);
+    }
+
+    .bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .bullets li {
+      font-size: 14.5px;
+      line-height: 1.42;
+      color: var(--slate);
+      padding-left: 16px;
+      position: relative;
+    }
+
+    .slide.dark .bullets li {
+      color: #e2e8f0;
+    }
+
+    .bullets li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 8px;
+      width: 6px;
+      height: 6px;
+      border-radius: 1px;
+      background: var(--teal);
+    }
+
+    .panel.amber-top .bullets li::before {
+      background: var(--amber);
+    }
+
+    .slide.dark .bullets li::before {
+      background: #5eead4;
+    }
+
+    .bullets strong {
+      color: var(--navy);
+      font-weight: 600;
+    }
+
+    .slide.dark .bullets strong {
+      color: #ffffff;
+    }
+
+    .code-btn {
+      display: inline-block;
+      background: var(--teal-soft);
+      color: var(--teal);
+      border: 1px solid rgba(13, 110, 110, 0.3);
+      padding: 1px 7px;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 13.5px;
+    }
+
+    .code-btn.amber {
+      background: var(--amber-soft);
+      color: #b45309;
+      border-color: rgba(217, 119, 6, 0.35);
+    }
+
+    .demo-output {
+      margin-top: 10px;
+      background: #0f1d30;
+      color: #e2e8f0;
+      padding: 10px 14px;
+      border-radius: 4px;
+      font-size: 13px;
+      line-height: 1.4;
+      border-left: 3px solid #14b8a6;
+    }
+
+    .demo-output.error {
+      border-left-color: var(--amber);
+    }
+
+    .demo-output strong {
+      color: #5eead4;
+    }
+
+    .demo-output.error strong {
+      color: #fbbf24;
+    }
+
+    /* Poster preview on Slide 3 */
+    .poster-box {
+      background: var(--white);
+      border: 1px solid var(--rule);
+      border-radius: 6px;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .poster-box img {
+      width: 100%;
+      height: auto;
+      max-height: 4.55in;
+      object-fit: contain;
+      border-radius: 3px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .poster-cap {
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-top: 6px;
+      text-align: center;
+    }
+
+    /* Footer */
+    .slide-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 10px;
+      border-top: 1px solid var(--rule);
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .slide.dark .slide-footer {
+      border-top-color: rgba(148, 163, 184, 0.22);
+      color: #94a3b8;
+    }
+
+    .cta-box {
+      margin-top: 12px;
+      background: var(--navy);
+      color: #ffffff;
+      border-radius: 5px;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .cta-box-url {
+      font-size: 14px;
+      font-weight: 700;
+      color: #5eead4;
+    }
+
+    .cta-box-note {
+      font-size: 12.5px;
+      color: #cbd5e1;
+      margin-top: 2px;
+    }
+
+    .cta-badge {
+      background: var(--amber);
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 8px 14px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SLIDE 1: Problema & Oportunitatea -->
+  <section class="slide dark">
+    <div class="top-bar"></div>
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="slide-kicker">01 / Problema și Oportunitatea</span>
+        <span class="slide-timer">0:00 – 0:30</span>
+      </div>
+      <h1>Paletizarea manuală a găleților de 5–15 kg blochează fabricile alimentare.</h1>
+      <div class="subtitle">
+        PaletCheck UR20 califică în 60 de secunde, de pe telefon, compatibilitatea liniei cu o celulă Tech-Con UR20 și rutează cererea spre cel mai apropiat sediu.
+      </div>
+    </header>
+
+    <div class="slide-body">
+      <div class="kpi-grid-3">
+        <div class="kpi-box amber">
+          <div class="kpi-val">2 op. / schimb</div>
+          <div class="kpi-lbl">Paletizare manuală, 2–3 schimburi/zi (reper PURATOS)</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-val">7,4–8,6 / min</div>
+          <div class="kpi-lbl">Ritm măsurat în testul FAT PURATOS (țintă ≥6/min, 0 erori)</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-val">~4 luni</div>
+          <div class="kpi-lbl">Timp livrare celulă UR20 (comenzi an curent până în august)</div>
+        </div>
+      </div>
+
+      <div class="cols-2">
+        <div class="panel">
+          <div>
+            <div class="panel-title">Blocajul real din hală și din vânzări</div>
+            <ul class="bullets">
+              <li>Gălețile din plastic de <strong>5 kg (100/europalet)</strong> și <strong>13 kg (44/europalet)</strong> implică ridicare repetitivă pe 2–3 schimburi.</li>
+              <li>Directorii de producție amână decizia: nu știu rapid dacă <strong>găleata + gripperul ≤ 20 kg</strong>, dacă orientarea mânerului cere vedere SICK 2D și unde apare blocajul aval.</li>
+              <li>Inginerii Tech-Con pierd ore de ofertare pe cereri incomplete, fără parametri de linie.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="panel">
+          <div>
+            <div class="panel-title">Segment țintă (ICP) și lanț de decizie</div>
+            <ul class="bullets">
+              <li><strong>Segment primar:</strong> fabrici alimentare din România (<strong>CAEN 10xx</strong> — panificație, lactate, sosuri, creme) în 2–3 schimburi.</li>
+              <li><strong>Evaluator pe telefon:</strong> Director Producție, Plant Manager, Inginer Mentenanță.</li>
+              <li><strong>Decident CapEx:</strong> Director General / CFO (<strong>130.000 EUR/celulă</strong>, scenariu concurs; alte industrii necesită validare separată).</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="slide-footer">
+      <span>PaletCheck UR20 · Tech-Con Industry România</span>
+      <span>AI-Powered Business Challenge 2026 · Slide 1/5</span>
+    </footer>
+  </section>
+
+  <!-- SLIDE 2: Soluția & Demo Live -->
+  <section class="slide">
+    <div class="top-bar"></div>
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="slide-kicker">02 / Soluția și Demo Live</span>
+        <span class="slide-timer">0:30 – 1:30 (Demo live 60s)</span>
+      </div>
+      <h1>PaletCheck UR20: pre-evaluare tehnică pe telefon, fără cont.</h1>
+      <div class="subtitle">
+        Link live: <span class="url-inline">https://paletcheck-ur20-techcon.netlify.app</span> (date fictive <strong>.example</strong>, verifică atât cazul normal, cât și erorile)
+      </div>
+    </header>
+
+    <div class="slide-body">
+      <div class="cols-2">
+        <div class="panel teal-top">
+          <div>
+            <div class="panel-title">Caz 1 — Flux normal (SC LactoSud Demo SRL)</div>
+            <ul class="bullets">
+              <li><strong>Pas 1:</strong> Apasă <span class="code-btn">Încarcă caz normal (Demo)</span> (Ilfov, Lactate, găleată 13 kg + gripper 3 kg, 6,5 găleți/min, 44/palet).</li>
+              <li><strong>Pas 2:</strong> Apasă <span class="code-btn">Evaluează compatibilitatea UR20</span> pentru calcul sarcină, comparație FAT, ritm schimb palet și hub.</li>
+              <li><strong>Pas 3:</strong> Apasă <span class="code-btn">Generează cerere relevantă (CRM)</span> → card cerere salvat local (deduplicat) + export <strong>.json</strong>.</li>
+            </ul>
+          </div>
+          <div class="demo-output">
+            <strong>Rezultat live:</strong> Compatibil pentru evaluare tehnică · 16 kg / 20 kg UR20 · 6,5 vs 7,4 găleți/min (reper FAT) · Schimb palet la ~6,8 min · Hub: Dragomirești-Deal
+          </div>
+        </div>
+
+        <div class="panel amber-top">
+          <div>
+            <div class="panel-title">Caz 2 — Date lipsă, erori și limite reale</div>
+            <ul class="bullets">
+              <li><strong>Pas 1:</strong> Apasă <span class="code-btn amber">Testează date lipsă / erori</span> apoi <span class="code-btn">Evaluează compatibilitatea UR20</span>.</li>
+              <li><strong>Validare deterministă:</strong> blochează 3 erori inline — ritm lipsă, sarcină <strong>21 kg &gt; 20 kg UR20</strong>, bifa de schimb manual paleți/separatoare neconfirmată.</li>
+              <li><strong>Scop onest:</strong> schimbarea paleților și separatoarele rămân <strong>manuale</strong>; transportul MiR, înfolierea și expedierea sunt explicit în afara scopului.</li>
+            </ul>
+          </div>
+          <div class="demo-output error">
+            <strong>Rezultat live:</strong> Verdict «Eroare date» · KPI ascunse · Butonul «Generează cerere relevantă (CRM)» rămâne blocat până la corectare.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="slide-footer">
+      <span>PaletCheck UR20 · Tech-Con Industry România</span>
+      <span>AI-Powered Business Challenge 2026 · Slide 2/5</span>
+    </footer>
+  </section>
+
+  <!-- SLIDE 3: Strategie, Promovare & Implementare -->
+  <section class="slide">
+    <div class="top-bar"></div>
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="slide-kicker">03 / Strategie, Promovare și Scalare Națională</span>
+        <span class="slide-timer">1:30 – 2:00</span>
+      </div>
+      <h1>Buget 30.000 EUR concentrat 65% în S1, operat prin 3 hub-uri.</h1>
+      <div class="subtitle">
+        Pentru livrare în anul calendaristic (~4 luni/celulă), contractele trebuie semnate până la final de august.
+      </div>
+    </header>
+
+    <div class="slide-body">
+      <div class="cols-promo">
+        <div class="panel teal-top">
+          <div>
+            <div class="panel-title">Alocare 30.000 EUR și Funnel</div>
+            <ul class="bullets">
+              <li><strong>Canale:</strong> Google Search 6.500 EUR, LinkedIn Ads 5.500 EUR, Studiu PURATOS 4.500 EUR, Direct CAEN 10xx 4.000 EUR, Webinare asociații 3.500 EUR, PWA/SEO 3.500 EUR, <strong>Rezervă 2.500 EUR</strong>.</li>
+              <li><strong>Regulă stop la 45 zile:</strong> canal &gt;400 EUR/cerere sau 0 cereri se taie cu 50%; clienți deduplicați.</li>
+              <li><strong>Funnel An 1:</strong> 120 cereri (250 EUR) → 54 întâlniri (45%) → 12 clienți (2.500 EUR) × 1,42 celule = <strong>17 celule</strong>.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="panel amber-top">
+          <div>
+            <div class="panel-title">3 Pași de Implementare</div>
+            <ul class="bullets">
+              <li><strong>Pas 1 (Q1 — 35% buget):</strong> Lansare PaletCheck + studiu PURATOS din Dragomirești-Deal și Timișoara (țintă: 40 cereri, 5 celule).</li>
+              <li><strong>Pas 2 (Q2–Aug — 30% buget):</strong> Extindere Iași, 3 webinare ROMPAN/APRIL și realocare din rezerva de 2.500 EUR (cumulat: 17 celule contractate până în august).</li>
+              <li><strong>Pas 3 (Q3–Q4):</strong> Livrare pe 3 hub-uri: <strong>Dragomirești-Deal 9</strong>, <strong>Timișoara 4</strong>, <strong>Iași 4</strong> (capacitate 18 celule în fereastra de 8 luni).</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="poster-box">
+          <img src="../03-promo/promo_poster.png" alt="Poster promoțional PaletCheck UR20" />
+          <div class="poster-cap">Material promovare LinkedIn (1080×1350)</div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="slide-footer">
+      <span>PaletCheck UR20 · Tech-Con Industry România</span>
+      <span>AI-Powered Business Challenge 2026 · Slide 3/5</span>
+    </footer>
+  </section>
+
+  <!-- SLIDE 4: Model Financiar -->
+  <section class="slide">
+    <div class="top-bar"></div>
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="slide-kicker">04 / Model Financiar (1 an calendaristic · EUR fără TVA)</span>
+        <span class="slide-timer">2:00 – 2:30</span>
+      </div>
+      <h1>17 celule aduc 310.000 EUR înainte de regie; 20 celule cu buffer impozit.</h1>
+      <div class="subtitle">
+        Sursă unică: <strong>deliverables/02-finance/financial_model.xlsx</strong> (3 foi, 99 formule Excel live, 0 erori, fără totaluri scrise manual).
+      </div>
+    </header>
+
+    <div class="slide-body">
+      <div class="kpi-grid-4">
+        <div class="kpi-box">
+          <div class="kpi-val">2.210.000 EUR</div>
+          <div class="kpi-lbl">Venit anual (17 × 130.000 EUR)</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-val">310.000 EUR</div>
+          <div class="kpi-lbl">Rezultat după promo (înainte de regie &amp; impozit)</div>
+        </div>
+        <div class="kpi-box amber">
+          <div class="kpi-val">2 celule</div>
+          <div class="kpi-lbl">Prag acoperire buget promovare (30.000 EUR)</div>
+        </div>
+        <div class="kpi-box amber">
+          <div class="kpi-val">20 celule</div>
+          <div class="kpi-lbl">Țintă comercială cu buffer (+3 celule pt. impozit 16%)</div>
+        </div>
+      </div>
+
+      <div class="cols-2">
+        <div class="panel teal-top">
+          <div>
+            <div class="panel-title">Unit Economics &amp; Costuri de Achiziție</div>
+            <ul class="bullets">
+              <li><strong>Contribuție/celulă:</strong> 130.000 EUR preț − 110.000 EUR cost direct = <strong>20.000 EUR (15,4%)</strong>.</li>
+              <li><strong>Rezultat operațional (17 celule):</strong> 17 × 20.000 − 30.000 promovare = <strong>310.000 EUR</strong> (cost direct anual: 1.870.000 EUR).</li>
+              <li><strong>Eficiență promovare:</strong> 250 EUR/cerere · 556 EUR/întâlnire · <strong>2.500 EUR/client</strong> · 1.765 EUR/celulă.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="panel amber-top">
+          <div>
+            <div class="panel-title">Transparență Profit Net &amp; Managementul Riscului</div>
+            <ul class="bullets">
+              <li><strong>Date lipsă din brief:</strong> regie vânzări, service/garanție, alte costuri fixe alocate și cota exactă de impozit.</li>
+              <li><strong>Verificare impozit 16% (fără regie):</strong> la 17 celule → 260.400 EUR net; pentru 300.000 EUR net trebuie 357.143 EUR brut → <strong>20 celule (310.800 EUR net)</strong>.</li>
+              <li><strong>Risc capacitate (94%):</strong> 17 livrări din 18 posibile în 8 luni → concentrarea bugetului în Q1–Q2 (65%) protejează termenul din august.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="slide-footer">
+      <span>PaletCheck UR20 · Tech-Con Industry România</span>
+      <span>AI-Powered Business Challenge 2026 · Slide 4/5</span>
+    </footer>
+  </section>
+
+  <!-- SLIDE 5: Utilizarea Critică a AI & Concluzie -->
+  <section class="slide">
+    <div class="top-bar"></div>
+    <header class="slide-header">
+      <div class="header-meta">
+        <span class="slide-kicker">05 / Utilizarea Critică a AI și Concluzie</span>
+        <span class="slide-timer">2:30 – 3:00</span>
+      </div>
+      <h1>AI ca accelerator, echipa ca filtru tehnic, financiar și vizual.</h1>
+      <div class="subtitle">
+        Flux multi-agent Kiro sincronizat pe un SSOT blocat, verificat cu teste automate, evaluator independent de formule și inspecție vizuală.
+      </div>
+    </header>
+
+    <div class="slide-body">
+      <div class="cols-2">
+        <div class="panel amber-top">
+          <div>
+            <div class="panel-title">3 erori AI reale, prinse și corectate de echipă</div>
+            <ul class="bullets">
+              <li><strong>Tech (app/):</strong> AI bloca evaluarea pe email gol (stricând demo-ul cu 3 erori) și desena etichete 3D sub palet → am separat validarea CRM și am mutat adnotările pe strat superior (<strong>88/88 teste Vitest</strong>).</li>
+              <li><strong>Finance (Excel):</strong> formula S1 ≥ 65% dădea avertisment fals din virgulă mobilă (0,64999) și 310.000 EUR era etichetat „profit net” → fixat cu <strong>ROUND()</strong> și clarificat impactul impozitului de 16%.</li>
+              <li><strong>Promo (poster):</strong> prima versiune era un template generic dark-mode → refăcut cu <strong>taste-skill</strong> într-o schemă tehnică UR20 cu brațul stratificat corect peste europalet.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="panel teal-top">
+          <div>
+            <div class="panel-title">De ce soluția este pregătită de pilot</div>
+            <ul class="bullets">
+              <li><strong>Prototip mobil real:</strong> testabil în 30s pe caz normal și pe caz cu date lipsă/greșite, fără login.</li>
+              <li><strong>Integritate tehnică:</strong> cifrele FAT PURATOS sunt separate de garanții; paleții și separatoarele rămân manual, MiR/înfolierea sunt excluse.</li>
+              <li><strong>Excel transparent:</strong> celulele de input permit echipei Tech-Con să introducă regia reală și să recalculeze pragul instant.</li>
+            </ul>
+          </div>
+
+          <div class="cta-box">
+            <div>
+              <div class="cta-box-url">https://paletcheck-ur20-techcon.netlify.app</div>
+              <div class="cta-box-note">Demo preîncărcat · Dragomirești-Deal, Timișoara, Iași</div>
+            </div>
+            <div class="cta-badge">Testează în 60s</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="slide-footer">
+      <span>PaletCheck UR20 · Tech-Con Industry România</span>
+      <span>AI-Powered Business Challenge 2026 · Slide 5/5</span>
+    </footer>
+  </section>
+
+</body>
+</html>
