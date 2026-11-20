@@ -14,9 +14,15 @@ The live prototype is **Tie-Breaker #1** in both Preselection and Finals. Goal: 
 ### Step 1: Read SSOT & Constraints
 Read `brief/SSOT.md`, `brief/NUMBERS.json`, `brief/RAW_THEME.md`, and `brief/data/*`. Lock down the exact core testable feature and any form/dataset required by the brief.
 
-### Step 2: Choose Stack (Primary vs. Zero-Build Wi-Fi Backup)
-- **Primary (Recommended):** React + Vite + Tailwind CSS in `app/` (`npm create vite@latest . -- --template react-ts` + `lucide-react`). Configure `base: './'` in `vite.config.ts` so it deploys cleanly anywhere (Vercel, Netlify, Cloudflare Pages, or copied into `docs/` for GitHub Pages).
-- **Zero-Build Fallback (if campus Wi-Fi blocks `npm`/Vercel):** Build clean, modern vanilla HTML + CSS + ES6 JS directly in `docs/` (`docs/index.html`, `docs/style.css`, `docs/app.js`) and publish via **GitHub Pages** (`gh api -X POST repos/<owner>/<repo>/pages -f "source[branch]=main" -f "source[path]=/docs"` → live at `https://<owner>.github.io/<repo>/` in ~60s!).
+### Step 2: Choose Stack & Configure GitHub Pages (`docs/`)
+Deploy target is **GitHub Pages** (`main` → `/docs`, live at `https://<owner>.github.io/<repo>/`; works on a PRIVATE repo with GitHub Student Pro while remaining publicly accessible to jurors).
+- **Primary (Recommended):** React + Vite + Tailwind CSS in `app/` (`npm create vite@latest . -- --template react-ts` + `lucide-react`). In `app/vite.config.ts`, set `base: './'` and `build: { outDir: '../docs', emptyOutDir: true }`, and recreate `docs/.nojekyll` after build (or copy `app/public/.nojekyll`).
+- **Zero-Build Fallback (if campus Wi-Fi blocks `npm`):** Build clean, modern vanilla HTML + CSS + ES6 JS directly in `docs/` (`docs/index.html`, `docs/style.css`, `docs/app.js`) keeping `docs/.nojekyll`.
+- **Enable Pages once (if not already enabled):**
+  ```bash
+  gh api -X POST repos/<owner>/<repo>/pages -f "source[branch]=main" -f "source[path]=/docs"
+  ```
+  Verify deploy status before testing: `gh api repos/<owner>/<repo>/pages/builds/latest --jq .status` (wait for `built`).
 
 ### Step 3: Build the "10-Second Wow + 30-Second Test" Interface
 Apply `.kiro/skills/frontend-craft/SKILL.md` and `.kiro/skills/copywriting-anti-slop/SKILL.md` (all visible UI text in **natural Romanian**):
@@ -32,7 +38,7 @@ Apply `.kiro/skills/frontend-craft/SKILL.md` and `.kiro/skills/copywriting-anti-
 ### Step 4: Quality Gate, True 360px Mobile Check & Deploy
 1. Zero dead buttons, zero `#` placeholder links, zero violet AI slop, zero emoji-as-icons, zero console errors.
 2. Mobile CSS check: when flex rows stack to column on mobile (`<= 640px`), set `flex: 0 0 auto` on stacked inputs/fields to prevent empty vertical gaps.
-3. Run build (`npm run build` if Vite) → deploy live (`npx vercel --prod` / `npx netlify deploy --prod --dir=dist` / GitHub Pages `docs/`).
+3. Run build (`npm run build` into `docs/` if Vite, ensuring `docs/.nojekyll` exists), commit & `git push` to `main`, and wait ~60s for GitHub Pages (`gh api repos/<owner>/<repo>/pages/builds/latest` → `built`).
 4. Run headless smoke test on the live URL:
    ```bash
    .venv/bin/python .kiro/skills/jury-evaluator/scripts/smoke_test_app.py <LIVE_URL>

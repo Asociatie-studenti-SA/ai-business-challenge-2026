@@ -7,9 +7,10 @@ fileMatchPattern: "{app,docs}/**"
 
 The web prototype carries **35/100 pts in Preselection** (#1 tie-breaker) and **30/100 pts in Finals** (#1 tie-breaker). Target: a fast, real, visually credible prototype testable in **under 30 seconds** at a public URL.
 
-## 1. Stack Strategy (Primary + Zero-Build Wi-Fi Fallback)
-- **Primary (Recommended):** **React + Vite + Tailwind CSS** in `app/` (client-side SPA, zero fragile backend dependencies). Deploy via Vercel (`npx vercel --prod`), Netlify (`npx netlify deploy --prod --dir=dist`), OR build to `docs/` (`base: './'`) for **GitHub Pages**.
-- **Zero-Build Fallback (if campus Wi-Fi blocks `npm` or Vercel/Netlify):** Clean **vanilla HTML + CSS + ES6 JS** directly in `docs/` published via **GitHub Pages** (`https://<owner>.github.io/<repo>/` — live within 60 seconds, zero build step!).
+## 1. Stack & Deploy Strategy (GitHub Pages via `docs/` — Locked)
+- **Deploy Target (Locked):** **GitHub Pages** from `main` branch → `/docs` folder (works on a **PRIVATE repo** with GitHub Student Pro while serving the live site **publicly** to the jury!). Keep `docs/.nojekyll` present so Vite/underscore assets are never stripped.
+- **Primary Stack:** **React + Vite + Tailwind CSS** in `app/` configured with `base: './'` and `build: { outDir: '../docs', emptyOutDir: false }` (preserve `docs/.nojekyll`!). Running `npm run build && git push` automatically publishes to `https://<owner>.github.io/<repo>/` within ~60 seconds.
+- **Zero-Build Fallback (if campus Wi-Fi blocks `npm`):** Clean **vanilla HTML + CSS + ES6 JS** directly in `docs/` (`docs/index.html`, `docs/style.css`, `docs/app.js`) — instant GitHub Pages deploy with zero build step.
 - **Deterministic Core Logic:** Keep core calculations/scoring/filtering in a pure client-side module so it works 100% offline/without API rate limits during live judging. Never hardcode secret API keys in frontend code.
 
 ## 2. Non-Negotiable UX & Anti-Slop Requirements (Integrated `frontend-craft`)

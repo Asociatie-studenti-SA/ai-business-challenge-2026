@@ -1,39 +1,92 @@
 {
-  "status": "TEMPLATE",
-  "project_name": "TBD",
+  "status": "INITIAL_DRAFT",
+  "project_name": "PaletCheck UR20 (Tech-Con Industry)",
   "output_language": "ro",
-  "currency": "RON",
-  "horizon_months": 12,
-  "live_app_url": "TBD",
+  "currency": "EUR",
+  "tax_note": "EUR fără TVA",
+  "period": "1 an calendaristic (1 ianuarie – 31 decembrie)",
+  "live_app_url": "https://asociatie-studenti-sa.github.io/ai-business-challenge-2026/",
   "ui_contract": {
-    "demo_button_label": "TBD",
-    "primary_cta_label": "TBD",
-    "demo_input_summary": "TBD",
-    "demo_expected_output": "TBD"
+    "demo_button_label": "Încarcă caz normal (Demo)",
+    "error_demo_button_label": "Testează date lipsă / erori",
+    "primary_cta_label": "Evaluează compatibilitatea UR20",
+    "demo_input_summary": "SC LactoSud Demo SRL, Ilfov, 13 kg + 3 kg gripper = 16 kg, 6.5 galeti/min, 2 schimburi, 2 operatori",
+    "demo_expected_output": "Compatibil pentru evaluare tehnică (16/20 kg UR20, schimb palet ~6.8 min, hub Dragomirești-Deal)"
   },
   "pricing": {
-    "model": "TBD",
-    "unit_price": 0,
-    "unit_label": "RON / lună"
+    "model": "Vânzare & integrare celulă robotică UR20 la cheie (scenariu concurs)",
+    "unit_price": 130000,
+    "unit_label": "EUR / celulă UR20 (fără TVA)"
   },
-  "assumptions": {
-    "starting_customers_m1": 0,
-    "ending_customers_m12": 0,
-    "monthly_new_customers_avg": 0,
-    "monthly_churn_rate": 0.05,
-    "cac": 0,
-    "variable_cost_per_unit": 0,
-    "monthly_fixed_costs": 0,
-    "initial_setup_cost": 0
+  "unit_economics": {
+    "direct_cost_per_cell": 110000,
+    "contribution_per_cell": 20000,
+    "gross_margin_pct": 15.4,
+    "annual_promo_budget_cap": 30000,
+    "shareholder_net_profit_target": 300000,
+    "promo_break_even_cells": 2,
+    "target_cells_before_overhead_tax": 17,
+    "indicative_cells_with_16pct_tax_only": 20,
+    "delivery_lead_time_months": 4
+  },
+  "promo_budget_allocation_eur": {
+    "google_search": 6500,
+    "linkedin_ads": 5500,
+    "ur20_content_case_study": 4500,
+    "direct_marketing_crm": 4000,
+    "webinars_associations": 3500,
+    "web_pwa_seo_ai": 3500,
+    "adjustment_reserve": 2500,
+    "total_promo_budget": 30000
+  },
+  "funnel_year_1": {
+    "relevant_requests": 120,
+    "request_to_meeting_rate": 0.45,
+    "technical_meetings": 54,
+    "meeting_to_client_rate": 0.2222,
+    "won_clients": 12,
+    "avg_cells_per_client": 1.42,
+    "cells_sold_and_delivered": 17,
+    "cost_per_relevant_request": 250,
+    "cost_per_technical_meeting": 555.56,
+    "cost_per_won_client": 2500,
+    "promo_cost_per_cell": 1764.71
   },
   "summary_year_1": {
-    "total_revenue": 0,
-    "total_costs": 0,
-    "net_profit": 0,
-    "break_even_month": 0,
-    "break_even_units_per_month": 0,
-    "gross_margin_pct": 0,
-    "ltv_to_cac": 0
+    "total_revenue": 2210000,
+    "total_direct_costs": 1870000,
+    "total_contribution": 340000,
+    "total_promo_costs": 30000,
+    "result_after_promo_before_overhead_tax": 310000,
+    "total_costs": 1900000,
+    "net_profit": 310000,
+    "break_even_month": 2,
+    "break_even_units_per_month": 2,
+    "gross_margin_pct": 15.4
   },
-  "brief_data_references": []
+  "puratos_reference_facts": {
+    "cells_implemented": 2,
+    "bucket_weights_kg": [5, 13],
+    "buckets_per_pallet_5kg": 100,
+    "buckets_per_pallet_13kg": 44,
+    "manual_before": "2 operatori/schimb, 2-3 schimburi/zi",
+    "target_rate_per_min": 6,
+    "fat_tested_13kg_per_min": 7.4,
+    "fat_tested_5kg_per_min": 8.6,
+    "fat_failed_picks": 0,
+    "vision_system": "SICK 2D (orientare mâner)",
+    "safety_scanners": 3,
+    "pallet_positions_per_cell": 2,
+    "manual_steps_remaining": "Schimbare paleți și amplasare separatoare",
+    "out_of_scope": "Transport paleți logistică (MiR), înfoliere, expediere",
+    "techcon_hubs_ro": ["Dragomirești-Deal", "Iași", "Timișoara"]
+  },
+  "brief_data_references": [
+    "Buget anual promovare: 30.000 EUR (plafon maxim, EUR fără TVA)",
+    "Preț vânzare celulă UR20: 130.000 EUR",
+    "Cost direct celulă UR20: 110.000 EUR -> Contribuție: 20.000 EUR/celulă",
+    "Țintă acționari: 300.000 EUR profit net/an (alte costuri & impozit neprecizate)",
+    "FAT PURATOS: 7,4 găleți/min (13 kg, +23%) și 8,6 găleți/min (5 kg, +43%), țintă >=6/min, livrare ~4 luni",
+    "Sedii Tech-Con România: Dragomirești-Deal, Iași, Timișoara"
+  ]
 }
