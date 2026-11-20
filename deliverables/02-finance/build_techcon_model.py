@@ -149,7 +149,7 @@ def build(numbers: dict) -> Workbook:
         (30, "Prag acoperire promovare (celule)", "=ROUNDUP(C19/C20,0)", INT, "ROUNDUP(promovare / contribuție)"),
         (31, "Prag țintă 300.000 EUR înainte de alte costuri (celule)", "=ROUNDUP((C7+C19)/C20,0)", INT, "ROUNDUP((țintă + promovare) / contribuție)"),
         (32, "Diferență rezultat vs. țintă 300.000 EUR", "=C24-C7", EUR, "Rezultat - țintă (înainte de alte costuri)"),
-        (33, "Verdict scenariu de bază", '=IF(C16>=C31,"Țintă atinsă înainte de alte costuri și impozit","Sub țintă")', None, "Vezi foaia Verificare Profit Net"),
+        (33, "Verdict scenariu de bază", '=IF(C16>=C31,"Atinsă (înainte de regie și impozit)","Sub țintă")', None, "Vezi foaia Verificare Profit Net"),
     ]
     for r, label, val, fmt, how in results:
         put(ws2, f"B{r}", label)
@@ -315,6 +315,7 @@ def build(numbers: dict) -> Workbook:
         ws.freeze_panes = "A4"
 
     add_extra_sheets(wb)
+    polish(wb)
     wb.calculation.fullCalcOnLoad = True
     return wb
 
@@ -525,7 +526,7 @@ def add_extra_sheets(wb: Workbook) -> None:
         ("Celule pentru 300.000 EUR net (min - max din testele de sensibilitate)", f"='{S6}'!C16", None, S6),
         ("Celule pentru 300.000 EUR net: fără regie / regie 120k / regie 180k", f"='{S6}'!N5&\" / \"&'{S6}'!N12&\" / \"&'{S6}'!N13", None, S6),
         ("Luna break-even (rezultat cumulat)", f"={R4}!C24", None, S4),
-        ("Necesar maxim de finanțare / luna (ipoteză: avans 30%, furnizor 50%)", f'=ROUND({R4}!C25,0)&" EUR / "&{R4}!C26', None, S4),
+        ("Necesar maxim de finanțare / luna (ipoteză: avans 30%, furnizor 50%)", f'=FIXED({R4}!C25,0)&" EUR / "&{R4}!C26', None, S4),
         ("Necesar maxim de finanțare fără avans client (caz prudent)", f"={R4}!C31", EUR, S4),
         ("Livrări max. pe trimestru vs capacitate 7", f'=MAX({R4}!C33:F33)&" / "&{R4}!H37', None, S4),
     ]
@@ -538,7 +539,7 @@ def add_extra_sheets(wb: Workbook) -> None:
     put(ws, f"B{r}", "Date lipsă din brief (de cerut de la Tech-Con)", bold=True)
     put(ws, f"C{r}", "Regie vânzări, service & garanție, alte costuri fixe, confirmare impozit 16%, termene de plată reale")
     put(ws, f"B{r + 1}", "Legendă culori", bold=True)
-    put(ws, f"C{r + 1}", "Galben = ipoteză editabilă | Verde = formulă | Roșu = dată lipsă")
+    put(ws, f"C{r + 1}", "Galben = ipoteză pe care o poți schimba | Alb = calcul automat (formulă) | Roșu = dată lipsă")
     put(ws, f"C{r + 2}", "310.000 EUR NU este profit net: este rezultatul înainte de regie și impozit.")
     ws.column_dimensions["A"].width = 3
     ws.column_dimensions["B"].width = 58
@@ -546,6 +547,74 @@ def add_extra_sheets(wb: Workbook) -> None:
     ws.column_dimensions["D"].width = 34
     ws.freeze_panes = "A5"
     wb.active = 0
+
+
+def polish(wb: Workbook) -> None:
+    """Readability pass: no gridlines, white formula cells, wrapped text, bigger font, tab colors, links from Sumar."""
+    from openpyxl.styles import Font as F
+    tab = {"Sumar": "0F766E", S1: "0369A1", S2: "0369A1", S3: "0369A1"}
+    for ws in wb.worksheets:
+        ws.sheet_view.showGridLines = False
+        ws.sheet_view.zoomScale = 110
+        ws.sheet_properties.tabColor = tab.get(ws.title, "64748B")
+        ws.page_setup.orientation = "landscape"
+        ws.page_setup.fitToWidth = 1
+        ws.page_setup.fitToHeight = 0
+        last_col = ws.max_column
+        for row in ws.iter_rows():
+            for c in row:
+                if c.value is None:
+                    continue
+                if c.fill is not None and c.fill.fgColor is not None and c.fill.fgColor.rgb in ("00ECFDF5", "FFECFDF5", "ECFDF5"):
+                    c.fill = PatternFill(fill_type=None)
+                f = c.font
+                size = 15 if c.row == 1 else (10 if c.row == 2 else 11)
+                c.font = F(name="Calibri", size=size, bold=f.bold or c.row == 1, italic=f.italic,
+                           color=f.color if f.color is not None else SLATE)
+                is_num = isinstance(c.value, (int, float)) or (isinstance(c.value, str) and c.value.startswith("=") and c.number_format not in ("General", "@"))
+                c.alignment = Alignment(wrap_text=c.row > 2, vertical="center",
+                                        horizontal="right" if is_num and c.column > 2 else "left")
+        ws.merge_cells(start_row=1, start_column=1, end_row=1, end_column=max(4, last_col))
+        ws.merge_cells(start_row=2, start_column=1, end_row=2, end_column=max(4, last_col))
+        # Auto-width: each column fits its longest plain text (max 62), so rows stay one line tall.
+        from openpyxl.utils import get_column_letter as gcl
+        for col in range(1, last_col + 1):
+            longest = 0
+            for r in range(3, ws.max_row + 1):
+                v = ws.cell(row=r, column=col).value
+                if isinstance(v, str) and not v.startswith("="):
+                    longest = max(longest, len(v))
+            letter = gcl(col)
+            cur = ws.column_dimensions[letter].width or 10
+            ws.column_dimensions[letter].width = max(cur, min(62, longest * 1.08 + 2))
+        ws["A2"].alignment = Alignment(wrap_text=True, vertical="top")
+        ws.row_dimensions[1].height = 26
+        ws.row_dimensions[2].height = 32
+    sumar = wb["Sumar"]
+    for row in sumar.iter_rows(min_row=5, min_col=4, max_col=4):
+        c = row[0]
+        if isinstance(c.value, str) and c.value in wb.sheetnames:
+            c.hyperlink = f"#'{c.value}'!A1"
+            c.font = F(name="Calibri", size=11, color="0369A1", underline="single")
+            c.value = f"Deschide foaia: {c.value}"
+    sumar["D4"].value = "Unde se calculează (click)"
+    sumar.column_dimensions["D"].width = 54
+    # Long explanations span the empty neighbour columns instead of stretching number columns.
+    b = wb[S1]
+    b.column_dimensions["D"].width = 13
+    for r in list(range(4, 11)) + list(range(23, 29)):
+        b.merge_cells(f"D{r}:E{r}")
+    cal = wb["Calendar 12 luni & Cash"]
+    for col in "CDEFGHIJKLMN":
+        cal.column_dimensions[col].width = 14
+    cal.column_dimensions["B"].width = 50
+    for r in list(range(4, 7)) + list(range(23, 32)):
+        cal.merge_cells(f"D{r}:I{r}")
+    sens = wb["Sensibilitate (1 variabilă)"]
+    sens.merge_cells("C16:F16")
+    sens.merge_cells("C17:O17")
+    sens.column_dimensions["C"].width = 10
+    wb[S2].column_dimensions["C"].width = 36
 
 
 def expected(numbers: dict) -> dict:
