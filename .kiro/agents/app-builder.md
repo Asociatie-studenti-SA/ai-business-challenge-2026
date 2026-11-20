@@ -5,6 +5,7 @@ tools: ["read", "write", "shell"]
 resources:
   - "skill://.kiro/skills/web-prototype/SKILL.md"
   - "skill://.kiro/skills/frontend-craft/SKILL.md"
+  - "skill://.kiro/skills/frontend-design/SKILL.md"
   - "skill://.kiro/skills/copywriting-anti-slop/SKILL.md"
 ---
 
