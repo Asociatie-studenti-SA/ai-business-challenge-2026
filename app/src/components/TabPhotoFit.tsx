@@ -16,6 +16,10 @@ import {
   drawPhotoFitComposite,
   exportPhotoFitPng,
   type PhotoOverlayTransform,
+  calibrateTransform,
+  maxPlaceReachM,
+  UR20_REACH_M,
+  type CalibPoint,
 } from '../logic/photoFit';
 import { formatScaled } from '../logic/numbers';
 
@@ -75,6 +79,15 @@ export function TabPhotoFit({
   const staticPose = useMemo(
     () => computeUr20ArmPose(0.45 * (60 / cellConfig.ratePerMin), cellConfig.ratePerMin, 'free'),
     [cellConfig.ratePerMin],
+  );
+
+  const [calibStep, setCalibStep] = useState<0 | 1 | 2>(0);
+  const [calibP1, setCalibP1] = useState<CalibPoint | null>(null);
+  const [calibRefM, setCalibRefM] = useState(1.2);
+  const [calibInfo, setCalibInfo] = useState<string | null>(null);
+  const placeReachM = useMemo(
+    () => maxPlaceReachM(cellConfig, staticPose),
+    [cellConfig, staticPose],
   );
 
   const loadDataUrl = (dataUrl: string, label: string) => {
@@ -187,6 +200,34 @@ export function TabPhotoFit({
 
   const onPointerDown = (e: PointerEvent<HTMLCanvasElement>) => {
     if (!bgImage) return;
+    if (calibStep > 0) {
+      const canvasEl = canvasRef.current;
+      if (!canvasEl) return;
+      const r = canvasEl.getBoundingClientRect();
+      const pt = { x: e.clientX - r.left, y: e.clientY - r.top };
+      if (calibStep === 1) {
+        setCalibP1(pt);
+        setCalibStep(2);
+        setStatusMsg('Atinge al doilea capăt al laturii de referință.');
+        return;
+      }
+      const p1 = calibP1;
+      const next = p1
+        ? calibrateTransform(p1, pt, calibRefM, r.width, r.height, cellConfig, transform)
+        : null;
+      setCalibStep(0);
+      setCalibP1(null);
+      if (next && p1) {
+        setTransform(next);
+        setErrorMsg(null);
+        const pxPerM = Math.round(Math.hypot(pt.x - p1.x, pt.y - p1.y) / calibRefM);
+        setCalibInfo(`Scară reală setată: 1 m ≈ ${pxPerM} px pe poză.`);
+        setStatusMsg('Celula UR20 este acum la scară reală aproximativă în zona marcată.');
+      } else {
+        setErrorMsg('Punctele sunt prea apropiate. Apasă din nou „Calibrează scara pe poză”.');
+      }
+      return;
+    }
     const canvas = canvasRef.current;
     if (!canvas) return;
     try {
@@ -349,8 +390,8 @@ export function TabPhotoFit({
           <input
             id="photofit-scale"
             type="range"
-            min={0.35}
-            max={1.8}
+            min={0.15}
+            max={4}
             step={0.05}
             value={transform.scale}
             onChange={(e) =>
@@ -384,6 +425,41 @@ export function TabPhotoFit({
         </div>
       </div>
 
+      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end">
+        <div className="min-w-0 flex-none">
+          <label htmlFor="calib-ref" className="mb-1 block text-sm font-medium text-slate-900">
+            Obiect de referință pe podea
+          </label>
+          <select
+            id="calib-ref"
+            value={calibRefM}
+            onChange={(e) => {
+              setCalibRefM(Number(e.target.value));
+              setCalibStep(0);
+              setCalibP1(null);
+            }}
+            className="block min-h-11 w-full min-w-0 rounded-lg border border-slate-300 bg-white px-3 py-2 text-base text-slate-900"
+          >
+            <option value={1.2}>Europalet – latura lungă (1,2 m)</option>
+            <option value={0.8}>Europalet – latura scurtă (0,8 m)</option>
+            <option value={1}>Reper marcat pe podea (1,0 m)</option>
+          </select>
+        </div>
+        <button
+          type="button"
+          onClick={() => {
+            setCalibStep(1);
+            setCalibP1(null);
+            setErrorMsg(null);
+            setStatusMsg('Atinge primul capăt al laturii de referință de pe podea.');
+          }}
+          aria-pressed={calibStep > 0}
+          className="inline-flex min-h-11 flex-none items-center justify-center rounded-lg border border-teal-700 bg-teal-700 px-3 py-2 text-sm font-semibold text-white hover:bg-teal-800"
+        >
+          Calibrează scara pe poză
+        </button>
+      </div>
+
       <div ref={stageRef} className="relative min-w-0 w-full">
         <canvas
           ref={canvasRef}
@@ -397,6 +473,14 @@ export function TabPhotoFit({
           aria-label="Zonă interactivă Photo-Fit pentru poziționarea celulei UR20 pe poza halei"
           className="block w-full max-w-full cursor-grab rounded-lg border border-slate-300 bg-slate-900 active:cursor-grabbing"
         />
+
+        {calibP1 ? (
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-teal-600"
+            style={{ left: calibP1.x, top: calibP1.y }}
+          />
+        ) : null}
 
         {!bgImage ? (
           <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center p-4 text-center">
@@ -412,6 +496,23 @@ export function TabPhotoFit({
           </div>
         ) : null}
       </div>
+
+      <p
+        role="status"
+        className={`rounded-lg px-3 py-2 text-sm font-medium ${
+          placeReachM <= UR20_REACH_M ? 'bg-emerald-50 text-emerald-900' : 'bg-red-50 text-red-900'
+        }`}
+      >
+        {placeReachM <= UR20_REACH_M
+          ? `Paleții sunt în raza UR20: cel mai îndepărtat punct de plasare la ${placeReachM.toFixed(2).replace('.', ',')} m din ${UR20_REACH_M.toFixed(2).replace('.', ',')} m.`
+          : `Atenție: punctul de plasare cel mai îndepărtat este la ${placeReachM.toFixed(2).replace('.', ',')} m, peste raza UR20 de 1,75 m.`}
+      </p>
+      {calibInfo ? (
+        <p className="text-xs text-slate-700">
+          {calibInfo} Scara este corectă lângă linia marcată; perspectiva pozei micșorează zonele
+          îndepărtate.
+        </p>
+      ) : null}
 
       <div className="flex flex-col gap-2 text-xs text-slate-700 sm:flex-row sm:items-center sm:justify-between">
         <span className="inline-flex items-center gap-1.5">

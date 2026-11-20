@@ -39,7 +39,7 @@ interface PendingLabel {
   anchorY?: number;
 }
 
-function computeViewport(
+export function computeViewport(
   width: number,
   height: number,
   config: CellConfig,

@@ -2,8 +2,14 @@
 // overlay transform clamping, aspect-ratio placement, and PNG composite export.
 // Zero external network calls or external URLs.
 
-import { computeUr20ArmPose, type CellConfig, type Ur20ArmPose } from './cellGeometry';
-import { renderCellCanvas } from './cellRenderer';
+import {
+  buildCellSceneGeometry,
+  computeUr20ArmPose,
+  projectPoint,
+  type CellConfig,
+  type Ur20ArmPose,
+} from './cellGeometry';
+import { computeViewport, renderCellCanvas } from './cellRenderer';
 import { formatScaled } from './numbers';
 
 export interface PhotoOverlayTransform {
@@ -40,7 +46,7 @@ export function clampPhotoTransform(t: PhotoOverlayTransform): PhotoOverlayTrans
   return {
     xNorm: clamp(t.xNorm, 0.08, 0.92),
     yNorm: clamp(t.yNorm, 0.12, 0.92),
-    scale: clamp(t.scale, 0.35, 1.8),
+    scale: clamp(t.scale, 0.15, 4),
     rotationDeg: clamp(t.rotationDeg, -180, 180),
   };
 }
@@ -341,9 +347,7 @@ export function drawPhotoFitComposite(
   }
 
   const clamped = clampPhotoTransform(transform);
-  const overlayBase = Math.min(width, height) * 0.72;
-  const overlayW = overlayBase;
-  const overlayH = overlayBase * 0.78;
+  const { w: overlayW, h: overlayH } = overlayBox(width, height);
 
   ctx.save();
   ctx.translate(clamped.xNorm * width, clamped.yNorm * height);
@@ -355,6 +359,7 @@ export function drawPhotoFitComposite(
     transparentBg: true,
     showDimensions: false,
   });
+  drawReachRings(ctx, overlayW, overlayH, config, pose);
 
   ctx.restore();
 }
@@ -416,4 +421,97 @@ export async function exportPhotoFitPng(
       else reject(new Error('Generarea fișierului PNG a eșuat.'));
     }, 'image/png');
   });
+}
+
+export const UR20_REACH_M = 1.75;
+/** Buckets are placed inside the pallet, not on its outer corner. */
+export const PLACE_INSET_M = 0.15;
+
+export function overlayBox(width: number, height: number): { w: number; h: number } {
+  const base = Math.min(width, height) * 0.72;
+  return { w: base, h: base * 0.78 };
+}
+
+export interface CalibPoint {
+  x: number;
+  y: number;
+}
+
+/** Real-scale overlay from 2 taps on a floor edge of known length (CSS px of the stage). */
+export function calibrateTransform(
+  p1: CalibPoint,
+  p2: CalibPoint,
+  refLengthM: number,
+  stageW: number,
+  stageH: number,
+  config: CellConfig,
+  prev: PhotoOverlayTransform,
+): PhotoOverlayTransform | null {
+  const distPx = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+  if (!(refLengthM > 0) || distPx < 10 || stageW <= 0 || stageH <= 0) return null;
+  const { w, h } = overlayBox(stageW, stageH);
+  const vp = computeViewport(w, h, config, true);
+  return clampPhotoTransform({
+    ...prev,
+    scale: distPx / refLengthM / vp.pxPerMeter,
+    xNorm: (p1.x + p2.x) / 2 / stageW,
+    yNorm: (p1.y + p2.y) / 2 / stageH,
+  });
+}
+
+/** Largest distance from a UR20 base to a bucket place point (meters). */
+export function maxPlaceReachM(config: CellConfig, pose: Ur20ArmPose): number {
+  const scene = buildCellSceneGeometry(config, pose);
+  let maxD = 0;
+  for (const cell of scene.cells) {
+    for (const pal of cell.pallets) {
+      const hx = pal.widthM / 2 - PLACE_INSET_M;
+      const hy = pal.depthM / 2 - PLACE_INSET_M;
+      for (const sx of [-1, 1]) {
+        for (const sy of [-1, 1]) {
+          const d = Math.hypot(
+            pal.centerX + sx * hx - cell.pedestal.x,
+            pal.centerY + sy * hy - cell.pedestal.y,
+          );
+          if (d > maxD) maxD = d;
+        }
+      }
+    }
+  }
+  return maxD;
+}
+
+/** Dashed 1,75 m reach ring on the floor around each UR20 base. */
+export function drawReachRings(
+  ctx: CanvasRenderingContext2D,
+  w: number,
+  h: number,
+  config: CellConfig,
+  pose: Ur20ArmPose,
+): void {
+  const vp = computeViewport(w, h, config, true);
+  const scene = buildCellSceneGeometry(config, pose);
+  ctx.save();
+  ctx.setLineDash([6, 4]);
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = '#0f766e';
+  for (const cell of scene.cells) {
+    ctx.beginPath();
+    for (let i = 0; i <= 64; i++) {
+      const a = (i / 64) * Math.PI * 2;
+      const pt = projectPoint(
+        {
+          x: cell.pedestal.x + UR20_REACH_M * Math.cos(a),
+          y: cell.pedestal.y + UR20_REACH_M * Math.sin(a),
+          z: 0,
+        },
+        config.viewMode,
+        vp,
+      );
+      if (i === 0) ctx.moveTo(pt.x, pt.y);
+      else ctx.lineTo(pt.x, pt.y);
+    }
+    ctx.stroke();
+  }
+  ctx.restore();
 }
