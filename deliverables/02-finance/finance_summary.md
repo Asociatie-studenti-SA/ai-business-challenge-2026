@@ -1,7 +1,7 @@
 # Sumar model financiar - PaletCheck UR20 (Tech-Con Industry)
 
 Scenariu de bază, EUR fără TVA, 1 an calendaristic (1 ian - 31 dec). Se numără doar celulele vândute **și livrate** în an.
-Sursă unică: `deliverables/02-finance/financial_model.xlsx` (7 foi, 453 formule Excel live, `fullCalcOnLoad=1`, 0 erori la recalcularea în Excel). Generat de `build_techcon_model.py`.
+Sursă unică: `deliverables/02-finance/financial_model.xlsx` (7 foi, 471 formule Excel live, `fullCalcOnLoad=1`, 0 erori la recalcularea în Excel). Generat de `build_techcon_model.py`.
 
 ## 1. Buget promovare 30.000 EUR (foaia `Buget Promovare 30k EUR`)
 
@@ -72,7 +72,9 @@ Fișierul se deschide pe foaia `Sumar`: toți indicatorii ceruți de brief, lega
 
 **Calendar 12 luni & Cash.** Comenzi pe luni: 2, 2, 1, 2, 3, 3, 2, 2 (ian-aug), apoi 0. Livrarea vine după 4 luni, deci ultima comandă care se livrează în an este în **august**. Livrări pe trimestru: 0 / 4 / 6 / 7, toate sub capacitatea de 7 celule/trimestru (Dragomirești-Deal 9, Timișoara 4, Iași 4).
 - Break-even pe luni (rezultat cumulat ≥ 0): **mai**, la primele 2 livrări.
-- Necesar maxim de finanțare: **125.500 EUR în aprilie**. Ipoteze de validat cu Tech-Con: avans client 30% la comandă, plată furnizori 50% la comandă.
+- Necesar maxim de finanțare: **125.500 EUR în aprilie**, din ipotezele avans client 30% și plată furnizori 50% la comandă (de validat cu Tech-Con; vezi foaia Calendar, rândul 21).
+- Caz prudent, fără avans de la client: **471.500 EUR în iulie** (rândul 22). Diferența arată cât contează negocierea avansului în contract.
+- Capacitate: în trimestrul cel mai plin fiecare hub este exact la limită (rezervă 0). O singură comandă întârziată mută o celulă în anul 2.
 - Numerar la 31 decembrie: 310.000 EUR, egal cu rezultatul anual.
 
 **Canale & regula 45 zile.** Cereri relevante estimate pe canal (30 / 22 / 18 / 20 / 16 / 14 = 120), cost pe cerere între 200 și 250 EUR. Canalul peste 400 EUR sau fără cereri primește automat „Reduce 50%”. Banii eliberați și rezerva de 2.500 EUR merg la canalul cel mai ieftin.

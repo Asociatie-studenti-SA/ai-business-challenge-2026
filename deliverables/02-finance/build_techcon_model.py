@@ -369,9 +369,14 @@ def add_extra_sheets(wb: Workbook) -> None:
         put(ws, f"{c}19", f"={c}10*{R2}!$C$5*$C$5+{c}11*{R2}!$C$5*(1-$C$5)", EUR, CALC_FILL)
         put(ws, f"{c}20", f"={c}18-{c}19-{c}15", EUR, CALC_FILL)
         put(ws, f"{c}21", f"={c}20" if not prev else f"={prev}21+{c}20", EUR, CALC_FILL, True)
+        put(ws, f"{c}22", f"={c}11*{R2}!$C$4-{c}19-{c}15" if not prev else f"={prev}22+{c}11*{R2}!$C$4-{c}19-{c}15", EUR, CALC_FILL)
+    put(ws, "B22", "Numerar cumulat FĂRĂ avans client (caz prudent)")
     for r in (10, 11, 13, 14, 15, 16, 18, 19, 20):
         put(ws, f"O{r}", f"=SUM(C{r}:N{r})", INT if r in (10, 11) else EUR, CALC_FILL, True)
     head(ws, 23, ["Rezultat calendar", "Valoare", "Explicație"], 2)
+    put(ws, "B31", "Necesar maxim de finanțare FĂRĂ avans client")
+    put(ws, "C31", "=-MIN(0,MIN($C$22:$N$22))", EUR, CALC_FILL, True)
+    put(ws, "D31", "Caz prudent: clientul plătește tot la livrare")
     summary = [
         (24, "Luna break-even (rezultat cumulat ≥ 0)", '=IFERROR(INDEX($C$8:$N$8,MATCH(TRUE,INDEX($C$17:$N$17>=0,0),0)),"neatins")', None, "Prima lună în care rezultatul cumulat devine pozitiv"),
         (25, "Necesar maxim de finanțare (numerar)", "=-MIN(0,MIN($C$21:$N$21))", EUR, "Cel mai negativ numerar cumulat: îl acoperă Tech-Con (capital propriu / linie de credit)"),
@@ -385,7 +390,7 @@ def add_extra_sheets(wb: Workbook) -> None:
         put(ws, f"B{r}", lab)
         put(ws, f"C{r}", f, fmt, CALC_FILL, True)
         put(ws, f"D{r}", note)
-    head(ws, 32, ["Livrări pe trimestru", "Q1", "Q2", "Q3", "Q4", "Total", "Capacitate / trim.", "Status", "Egal cu alocare hub"], 2)
+    head(ws, 32, ["Livrări pe trimestru", "Q1", "Q2", "Q3", "Q4", "Total", "Capacitate / trim.", "Status", "Egal cu alocare hub", "Rezervă capacitate (trim. cel mai plin)"], 2)
     put(ws, "B33", "Livrări din calendar", bold=True)
     for j, (a, b) in enumerate((("C", "E"), ("F", "H"), ("I", "K"), ("L", "N"))):
         col = chr(ord("C") + j)
@@ -401,6 +406,7 @@ def add_extra_sheets(wb: Workbook) -> None:
         put(ws, f"H{r}", f"={R3}!E{src}", INT, CALC_FILL)
         put(ws, f"I{r}", f'=IF(MAX(C{r}:F{r})<=H{r},"OK","PESTE CAPACITATE")', None, CALC_FILL, True)
         put(ws, f"J{r}", f'=IF(G{r}={R3}!C{src},"OK","Diferență")', None, CALC_FILL)
+        put(ws, f"K{r}", f'=H{r}-MAX(C{r}:F{r})&IF(H{r}-MAX(C{r}:F{r})=0," (la limită)","")', None, CALC_FILL)
     put(ws, "B37", "Total hub-uri", bold=True)
     for col in "CDEFG":
         put(ws, f"{col}37", f"=SUM({col}34:{col}36)", INT, CALC_FILL, True)
@@ -517,8 +523,10 @@ def add_extra_sheets(wb: Workbook) -> None:
         ("Celule pentru 300.000 EUR net (fără regie)", f"={R3}!C14", INT, S3),
         ("Țintă comercială recomandată (17 + 3 rezervă)", f"={R3}!C21", INT, S3),
         ("Celule pentru 300.000 EUR net (min - max din testele de sensibilitate)", f"='{S6}'!C16", None, S6),
+        ("Celule pentru 300.000 EUR net: fără regie / regie 120k / regie 180k", f"='{S6}'!N5&\" / \"&'{S6}'!N12&\" / \"&'{S6}'!N13", None, S6),
         ("Luna break-even (rezultat cumulat)", f"={R4}!C24", None, S4),
-        ("Necesar maxim de finanțare / luna", f'=ROUND({R4}!C25,0)&" EUR / "&{R4}!C26', None, S4),
+        ("Necesar maxim de finanțare / luna (ipoteză: avans 30%, furnizor 50%)", f'=ROUND({R4}!C25,0)&" EUR / "&{R4}!C26', None, S4),
+        ("Necesar maxim de finanțare fără avans client (caz prudent)", f"={R4}!C31", EUR, S4),
         ("Livrări max. pe trimestru vs capacitate 7", f'=MAX({R4}!C33:F33)&" / "&{R4}!H37', None, S4),
     ]
     for k, (lab, f, fmt, where) in enumerate(kpis):
@@ -591,6 +599,9 @@ def lock_numbers(numbers: dict, e: dict) -> None:
               "break_even_note": "Prag acoperire promovare = 2 celule (unit_economics.promo_break_even_cells). Break-even pe luni (rezultat cumulat >= 0) = Mai, din foaia Calendar 12 luni & Cash."})
     for k in ("net_profit", "break_even_month", "break_even_units_per_month"):
         s.pop(k, None)
+    for blk in (s, numbers["unit_economics"]):
+        if "gross_margin_pct" in blk:
+            blk["contribution_margin_pct"] = blk.pop("gross_margin_pct")
     numbers["calendar_year_1"] = {
         "orders_per_month": [2, 2, 1, 2, 3, 3, 2, 2, 0, 0, 0, 0],
         "deliveries_per_month": [0, 0, 0, 0, 2, 2, 1, 2, 3, 3, 2, 2],
@@ -598,6 +609,12 @@ def lock_numbers(numbers: dict, e: dict) -> None:
         "last_order_month_for_delivery_in_year": "August",
         "client_advance_at_order_pct": 0.30,
         "supplier_payment_at_order_pct": 0.50,
+        "break_even_month": "Mai",
+        "peak_funding_need_eur": 125500,
+        "peak_funding_need_month": "Aprilie",
+        "peak_funding_need_no_client_advance_eur": 471500,
+        "peak_funding_need_no_client_advance_month": "Iulie",
+        "hub_capacity_slack_busiest_quarter": 0,
         "assumption_note": "Avans 30% si plata furnizor 50% la comanda = ipoteze de validat cu Tech-Con.",
     }
     numbers["sensitivity_cells_for_300k_net"] = {"no_overhead": 20, "overhead_120k": 26, "overhead_180k": 29}
