@@ -11,6 +11,8 @@ import { RequestPanel } from './components/RequestPanel';
 import { BusinessStrip } from './components/BusinessStrip';
 import { CellVisualizerSection } from './components/CellVisualizerSection';
 import { Footer } from './components/Footer';
+import { GuideChatbot } from './components/GuideChatbot';
+import type { AppSection, AppSnapshot } from './logic/chatbotEngine';
 import { DEMO_ERRORS, DEMO_NORMAL, MESSAGES, SEGMENTS } from './logic/constants';
 import { buildRequest, defaultBucketsPerPallet, evaluate } from './logic/engine';
 import { downloadRequest } from './logic/exporter';
@@ -56,8 +58,14 @@ export default function App() {
   const [count, setCount] = useState(() => store.count());
   const [evalTick, setEvalTick] = useState(0);
   const [demoResetTick, setDemoResetTick] = useState(0);
+  const [spotlight, setSpotlight] = useState<AppSection | null>(null);
 
+  const demoRef = useRef<HTMLDivElement>(null);
+  const formRef = useRef<HTMLDivElement>(null);
   const resultRef = useRef<HTMLDivElement>(null);
+  const visualizerRef = useRef<HTMLDivElement>(null);
+  const requestRef = useRef<HTMLDivElement>(null);
+  const spotlightTimerRef = useRef<number | null>(null);
 
   // After each evaluation, bring the result into view if its top is off-screen (mobile stack).
   useEffect(() => {
@@ -70,10 +78,18 @@ export default function App() {
     }
   }, [evalTick]);
 
+  useEffect(() => {
+    return () => {
+      if (spotlightTimerRef.current !== null) {
+        window.clearTimeout(spotlightTimerRef.current);
+      }
+    };
+  }, []);
+
+  const currentSerialized = JSON.stringify(values);
+  const formIsDirtySinceEval = evaluatedSnapshot !== null && evaluatedSnapshot !== currentSerialized;
   const requestEnabled =
-    result !== null &&
-    result.verdict !== 'Eroare date' &&
-    evaluatedSnapshot === JSON.stringify(values);
+    result !== null && result.verdict !== 'Eroare date' && !formIsDirtySinceEval;
 
   const resetWith = (next: FormValues, nextErrors: FieldErrors) => {
     setValues(next);
@@ -109,46 +125,103 @@ export default function App() {
     setRequestMsg(null);
   };
 
-  const onEvaluate = () => {
+  const onEvaluate = (): EvaluationResult => {
     const r = evaluate(values);
     setErrors(r.errors);
     setResult(r);
     setEvaluatedSnapshot(JSON.stringify(values));
     setRequestMsg(null);
     setEvalTick((t) => t + 1);
+    return r;
   };
 
-  const onRequest = () => {
-    if (!requestEnabled || result === null) return;
+  const onRequest = (): boolean => {
+    if (!requestEnabled || result === null) return false;
     if (!isSyntheticEmail(values.email)) {
       setErrors((prev) => ({ ...prev, email: MESSAGES.emailDemo }));
       setRequestMsg(MESSAGES.emailDemo);
-      return;
+      return false;
     }
     const res = store.save(buildRequest(values, result, new Date().toISOString()));
     setRequestCard(res.record);
     setRequestMsg(res.status === 'duplicate' ? MESSAGES.duplicate : null);
     setCount(store.count());
     setExportFailed(false);
+    return true;
   };
 
   const onExport = () => {
     if (requestCard) setExportFailed(!downloadRequest(requestCard));
   };
 
+  const onSpotlight = (section: AppSection) => {
+    const map: Record<AppSection, HTMLDivElement | null> = {
+      demo: demoRef.current,
+      form: formRef.current,
+      result: resultRef.current,
+      visualizer: visualizerRef.current,
+      request: requestRef.current,
+    };
+    const el = map[section];
+    if (el) {
+      el.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'center' });
+    }
+    setSpotlight(section);
+    if (spotlightTimerRef.current !== null) {
+      window.clearTimeout(spotlightTimerRef.current);
+    }
+    spotlightTimerRef.current = window.setTimeout(() => {
+      setSpotlight(null);
+      spotlightTimerRef.current = null;
+    }, 4500);
+  };
+
+  const spotlightClass = (section: AppSection) =>
+    spotlight === section
+      ? 'relative rounded-xl ring-4 ring-teal-600/40 ring-offset-2 ring-offset-slate-50 transition-shadow'
+      : 'relative';
+
+  const spotlightBadge = (section: AppSection) =>
+    spotlight === section ? (
+      <span
+        aria-live="polite"
+        className="pointer-events-none absolute -top-3 right-3 z-10 rounded-full bg-teal-700 px-2.5 py-0.5 text-xs font-semibold text-white shadow-sm"
+      >
+        Uite aici!
+      </span>
+    ) : null;
+
+  const chatSnapshot: AppSnapshot = {
+    values,
+    errors,
+    result,
+    requestEnabled,
+    hasSavedRequest: requestCard !== null,
+    savedCount: count,
+    formIsDirtySinceEval,
+  };
+
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
+    <div className="min-h-screen bg-slate-50 pb-20 text-slate-900">
       <Header />
       <main className="space-y-6 pb-2">
         <Hero />
         <div className="mx-auto max-w-6xl space-y-6 px-4 sm:px-6">
-          <DemoBar onDemoNormal={onDemoNormal} onDemoErrors={onDemoErrors} />
+          <div ref={demoRef} className={`${spotlightClass('demo')} scroll-mt-6 p-1`}>
+            {spotlightBadge('demo')}
+            <DemoBar onDemoNormal={onDemoNormal} onDemoErrors={onDemoErrors} />
+          </div>
 
           <div className="grid gap-6 lg:grid-cols-2">
-            <div className="min-w-0 rounded-lg border border-slate-200 bg-white p-4 sm:p-6">
+            <div
+              ref={formRef}
+              className={`${spotlightClass('form')} min-w-0 scroll-mt-6 rounded-lg border border-slate-200 bg-white p-4 sm:p-6`}
+            >
+              {spotlightBadge('form')}
               <LineForm values={values} errors={errors} onChange={onChange} onSubmit={onEvaluate} />
             </div>
-            <div ref={resultRef} className="min-w-0 scroll-mt-4">
+            <div ref={resultRef} className={`${spotlightClass('result')} min-w-0 scroll-mt-6`}>
+              {spotlightBadge('result')}
               {result === null ? (
                 <div className="rounded-lg border border-slate-200 bg-white p-4 text-sm text-slate-600 sm:p-6">
                   Rezultatul apare aici după evaluare.
@@ -161,25 +234,39 @@ export default function App() {
             </div>
           </div>
 
-          <CellVisualizerSection
-            bucketKgRaw={values.bucketKg}
-            ratePerMinRaw={values.ratePerMin}
-            demoResetTick={demoResetTick}
-          />
+          <div ref={visualizerRef} className={`${spotlightClass('visualizer')} scroll-mt-6`}>
+            {spotlightBadge('visualizer')}
+            <CellVisualizerSection
+              bucketKgRaw={values.bucketKg}
+              ratePerMinRaw={values.ratePerMin}
+              demoResetTick={demoResetTick}
+            />
+          </div>
 
-          <RequestPanel
-            enabled={requestEnabled}
-            onRequest={onRequest}
-            card={requestCard}
-            message={requestMsg}
-            exportFailed={exportFailed}
-            onExport={onExport}
-            count={count}
-          />
+          <div ref={requestRef} className={`${spotlightClass('request')} scroll-mt-6`}>
+            {spotlightBadge('request')}
+            <RequestPanel
+              enabled={requestEnabled}
+              onRequest={onRequest}
+              card={requestCard}
+              message={requestMsg}
+              exportFailed={exportFailed}
+              onExport={onExport}
+              count={count}
+            />
+          </div>
         </div>
         <BusinessStrip />
       </main>
       <Footer />
+      <GuideChatbot
+        snapshot={chatSnapshot}
+        onDemoNormal={onDemoNormal}
+        onDemoErrors={onDemoErrors}
+        onEvaluate={onEvaluate}
+        onSaveRequest={onRequest}
+        onSpotlight={onSpotlight}
+      />
     </div>
   );
 }
